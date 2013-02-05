@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Declarations>
+		<!-- Разместить невизуальные элементы (например, службы или объекты значений) -->
+	</fx:Declarations>
+	<s:Label x="361" y="245" text="Метка"/>
+	<s:ComboBox x="404" y="234"/>
+	<s:Label x="361" y="287" text="Метка"/>
+	<s:TextInput x="404" y="277" width="146"/>
+	<s:Button x="439" y="318" label="Кнопка"/>
+</s:Application>
