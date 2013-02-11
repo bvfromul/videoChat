@@ -6,8 +6,8 @@ package main
 	
 	import spark.components.Button;
 	import spark.components.ComboBox;
-	import spark.components.Label;
 	import spark.components.Group;
+	import spark.components.Label;
 	import spark.components.TextInput;
 	
 	public class UserInterface extends Group
@@ -44,6 +44,7 @@ package main
 			userNickTextInput.y = 235;
 			userNickTextInput.width = 146;
 			userNickTextInput.id = 'userNick';
+			insertDefaultNick(userNickTextInput);
 			addElement(userNickTextInput);
 			
 			var connectButton:Button = new Button();
@@ -53,7 +54,12 @@ package main
 			connectButton.id = 'connectButton';
 			addElement(connectButton);
 			
-			trace('init interface');
+			trace('init connection interface');
+		}
+		
+		private function insertDefaultNick(target:TextInput):void
+		{
+			target.text = 'nick_random' + (Math.round(Math.random() * 98) + 1).toString();			
 		}
 	}
 }
