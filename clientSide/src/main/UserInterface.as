@@ -1,8 +1,7 @@
 package main
 {
-	
-	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
+	import flash.events.Event;
 	
 	import spark.components.Button;
 	import spark.components.ComboBox;
@@ -52,6 +51,7 @@ package main
 			connectButton.y = 276;
 			connectButton.label = 'connect';
 			connectButton.id = 'connectButton';
+			connectButton.addEventListener(MouseEvent.CLICK, initConnection);
 			addElement(connectButton);
 			
 			trace('init connection interface');
@@ -60,6 +60,11 @@ package main
 		private function insertDefaultNick(target:TextInput):void
 		{
 			target.text = 'nick_random' + (Math.round(Math.random() * 98) + 1).toString();			
+		}
+
+		private function initConnection(event:MouseEvent):void
+		{
+			trace('init connection now');
 		}
 	}
 }
