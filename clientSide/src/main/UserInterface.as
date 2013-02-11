@@ -7,10 +7,10 @@ package main
 	import spark.components.Button;
 	import spark.components.ComboBox;
 	import spark.components.Label;
-	import spark.components.Panel;
+	import spark.components.Group;
 	import spark.components.TextInput;
 	
-	public class UserInterface extends Panel
+	public class UserInterface extends Group
 	{
 		public function UserInterface()
 		{

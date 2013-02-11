@@ -20,7 +20,6 @@ package main
 			userInterface.y = 0;
 			userInterface.percentWidth = 100;
 			userInterface.percentHeight = 100;
-			userInterface.title = "Ввод данных для соединения";
 			
 			addElement(userInterface);
 		}
