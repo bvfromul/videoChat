@@ -3,7 +3,7 @@ package main
 	public class ApplicationData
 	{
 		private var cirrusURL:String 			= 'rtmfp://p2p.rtmfp.net/';
-		private var cirrusDeveloprKey:String 	= 'ee460bd53e12fcdeb6e9d986-7b07fa96424d';
+		private var cirrusDeveloperKey:String 	= 'ee460bd53e12fcdeb6e9d986-7b07fa96424d';
 		private var userNick:String;
 		private var webServerUrl:String;
 		private var peerID:String;
@@ -43,9 +43,9 @@ package main
 			return cirrusURL;
 		}
 		
-		public function get _cirrusDeveloprKey():String
+		public function get _cirrusDeveloperKey():String
 		{
-			return cirrusDeveloprKey;
+			return cirrusDeveloperKey;
 		}
 	}
 }
