@@ -1,7 +1,6 @@
 package main
 {
-
-	import mx.events.FlexEvent;	
+	import mx.events.FlexEvent;
 	import spark.components.Application;
 	
 	public class VideoChatApplication extends Application
@@ -9,10 +8,16 @@ package main
 		
 		public function VideoChatApplication() 
 		{
-			addEventListener(FlexEvent.CREATION_COMPLETE, creationUiPanel);
+			addEventListener(FlexEvent.CREATION_COMPLETE, init);
 		}
 		
-		private function creationUiPanel(event:FlexEvent):void 
+		private function init(event:FlexEvent):void
+		{
+			var applicationData:ApplicationData = new ApplicationData(); 
+			createUi();
+		}
+
+		private function createUi():void
 		{
 			var userInterface:UserInterface = new UserInterface();
 
@@ -20,7 +25,7 @@ package main
 			userInterface.y = 0;
 			userInterface.percentWidth = 100;
 			userInterface.percentHeight = 100;
-			
+
 			addElement(userInterface);
 		}
 		

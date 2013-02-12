@@ -1,7 +1,7 @@
 package main
 {
-	import flash.events.MouseEvent;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	import spark.components.Button;
 	import spark.components.ComboBox;
