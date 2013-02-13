@@ -12,7 +12,7 @@ package main
 		{
 			userNick = nick;
 		}
-		
+
 		public function get _userNick():String
 		{
 			return userNick;

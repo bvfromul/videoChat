@@ -1,12 +1,15 @@
 package main
 {
+	import flash.events.Event;
+	
 	import mx.events.FlexEvent;
 	
 	import spark.components.Application;
 	
 	public class VideoChatApplication extends Application
 	{
-		public var test:String = 'eee';
+		private var applicationData:ApplicationData;
+		private var netStreamManager:NetStreamManager;
 		
 		public function VideoChatApplication() 
 		{
@@ -15,10 +18,10 @@ package main
 		
 		private function init(event:FlexEvent):void
 		{
-			var applicationData:ApplicationData = new ApplicationData();
-			var netStreamManaher:NetStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
-			
-			//applicationData._peerID();
+			applicationData = new ApplicationData();
+			netStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
+			netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
+
 			createUi();
 		}
 
@@ -32,6 +35,11 @@ package main
 			userInterface.percentHeight = 100;
 
 			addElement(userInterface);
+		}
+		
+		private function pickupPeerId(event:Event):void
+		{
+			applicationData._peerID = netStreamManager._peerId;
 		}
 		
 	}

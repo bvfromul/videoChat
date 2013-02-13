@@ -1,9 +1,11 @@
 package main
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.NetStatusEvent;
 	import flash.net.NetConnection;
 
-	public class NetStreamManager
+	public class NetStreamManager extends EventDispatcher
 	{
 		private var peerId:String;
 		private var netConnection:NetConnection;
@@ -23,6 +25,7 @@ package main
 		private function netConnectionStatus(event:NetStatusEvent):void
 		{
 			peerId = netConnection.nearID;
+			dispatchEvent(new Event('PEERID_READY'));
 		}
 			
 		public function get _peerId():String
