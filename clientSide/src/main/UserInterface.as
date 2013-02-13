@@ -1,5 +1,6 @@
 package main
 {
+	import flash.display.DisplayObjectContainer;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
@@ -11,6 +12,9 @@ package main
 	
 	public class UserInterface extends Group
 	{
+		private var hostURL:String;
+		private var userNick:String;
+		
 		public function UserInterface()
 		{
 			showConnectInterface();
@@ -53,8 +57,6 @@ package main
 			connectButton.id = 'connectButton';
 			connectButton.addEventListener(MouseEvent.CLICK, initConnection);
 			addElement(connectButton);
-			
-			trace('init connection interface');
 		}
 		
 		private function insertDefaultNick(target:TextInput):void
@@ -64,7 +66,23 @@ package main
 
 		private function initConnection(event:MouseEvent):void
 		{
-			trace('init connection now');
+			hostURL = (this.getChildAt(1) as ComboBox).textInput.text;
+			userNick = (this.getChildAt(3) as TextInput).text;
+			
+			if (userNick.length > 0 && hostURL.length > 0)
+			{
+				dispatchEvent(new Event('NICK_AND_HOST_READY'));
+			}
+		}
+
+		public function get _userNick():String
+		{
+			return userNick;
+		}
+
+		public function get _hostURL():String
+		{
+			return hostURL;
 		}
 	}
 }
