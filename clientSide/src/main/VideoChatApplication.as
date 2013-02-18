@@ -11,6 +11,7 @@ package main
 		private var applicationData:ApplicationData;
 		private var netStreamManager:NetStreamManager;
 		private var userInterface:UserInterface;
+		private var usersIdManger:UsersIdManager;
 		
 		public function VideoChatApplication() 
 		{
@@ -29,7 +30,7 @@ package main
 		private function createUi():void
 		{
 			userInterface = new UserInterface();
-			userInterface.addEventListener('NICK_AND_HOST_READY', pickupHostNick);
+			userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
 
 			userInterface.x = 0;
 			userInterface.y = 0;
@@ -44,10 +45,12 @@ package main
 			applicationData._peerID = netStreamManager._peerId;
 		}
 
-		private function pickupHostNick(event:Event):void
+		private function allDataReady(event:Event):void
 		{
 			applicationData._userNick = userInterface._userNick;
 			applicationData._webServerUrl = userInterface._hostURL;
+
+			usersIdManger = new UsersIdManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
 		}
 	}
 }
