@@ -3,7 +3,13 @@ class ServerSideOfVideoChat
 {
     private function writeInFile($file, $content)
     {
-        if (is_writeable($file)) 
+        if(!file_exists($file))
+        {
+            $fh = fopen($file, "w");
+            fwrite($fh, $content."\n");
+            fclose($fh);
+        }
+        elseif (is_writeable($file)) 
         {
             $fh = fopen($file, 'a+'); 
             fwrite($fh, $content."\n");
@@ -21,13 +27,13 @@ class ServerSideOfVideoChat
         header('Content-type: text/plain');
         echo '<?xml version="1.0" encoding="utf-8"?>'."\n".
               '<result>'."\n".
-                  '<status>'.$result.'</status>'."\n".
+                  '<update>'.$result.'</update>'."\n".
               '</result>';
     }
 
     public function ServerSideOfVideoChat()
     {
-        $file = 'pears';
+        $file = 'peers';
 
         if (isset($_GET['identity']) && isset($_GET['username']))
         {
