@@ -1,5 +1,7 @@
 package main
 {
+	import flash.net.SharedObject;
+
 	public class ApplicationData
 	{
 		private var cirrusURL:String 			= 'rtmfp://p2p.rtmfp.net/';
@@ -7,7 +9,20 @@ package main
 		private var userNick:String;
 		private var webServerUrl:String;
 		private var peerID:String;
+		private var sharedObject:SharedObject;
+		private var hostList:Array;
 
+		public function ApplicationData()
+		{
+			hostList = [];
+			sharedObject = SharedObject.getLocal('videoChat');
+			
+			if (sharedObject.data.hostList != null)
+			{
+				hostList = sharedObject.data.hostList;
+			}
+		}
+		
 		public function set _userNick(nick:String):void
 		{
 			userNick = nick;
@@ -46,6 +61,40 @@ package main
 		public function get _cirrusDeveloperKey():String
 		{
 			return cirrusDeveloperKey;
+		}
+		
+		public function saveHost():void
+		{
+			if (hostList.length)
+			{
+				for(var count:int=0; count < hostList.length; count++)
+				{
+					if (hostList[count] != webServerUrl)
+					{
+						writeHostInSO(webServerUrl);
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				writeHostInSO(webServerUrl);
+			}
+		}
+
+		private function writeHostInSO(host:String):void
+		{
+			hostList.push(host);
+			sharedObject.data.hostList = hostList;
+			sharedObject.flush();
+		}
+		
+		public function get _hostList():Array
+		{
+			return hostList;
 		}
 	}
 }

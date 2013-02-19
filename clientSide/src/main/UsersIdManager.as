@@ -1,14 +1,13 @@
 package main
 {
 	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
+	import flash.events.EventDispatcher;
 	
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
 	
-	public class UsersIdManager
+	public class UsersIdManager extends EventDispatcher
 	{
 		private var mHttpService:HTTPService;
 		private var webServerUrl:String;
@@ -57,7 +56,7 @@ package main
 			{
 				if (result.result.update == true)
 				{
-					trace('success');
+					dispatchEvent(new Event('SUCCESS_CONNECT'));
 				}
 				else
 				{
@@ -70,7 +69,7 @@ package main
 			}
 		}
 		
-		private function httpFault(event:ResultEvent):void
+		private function httpFault(event:FaultEvent):void
 		{
 			trace('fail');
 		}

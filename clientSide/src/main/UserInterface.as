@@ -4,6 +4,8 @@ package main
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
+	import mx.collections.ArrayCollection;
+	
 	import spark.components.Button;
 	import spark.components.ComboBox;
 	import spark.components.Group;
@@ -15,12 +17,12 @@ package main
 		private var hostURL:String;
 		private var userNick:String;
 		
-		public function UserInterface()
+		public function UserInterface(hosts:Array)
 		{
-			showConnectInterface();
+			showConnectInterface(hosts);
 		}
 		
-		private function showConnectInterface():void
+		private function showConnectInterface(hosts:Array):void
 		{
 			var hostLabel:Label = new Label();
 			hostLabel.x = 214;
@@ -33,6 +35,7 @@ package main
 			hostList.x = 257;
 			hostList.y = 192;
 			hostList.id = 'hostList';
+			hostList.dataProvider = new ArrayCollection(hosts);
 			addElement(hostList);
 			
 			var nickLabel:Label = new Label();

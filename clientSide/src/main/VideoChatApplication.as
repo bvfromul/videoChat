@@ -29,7 +29,7 @@ package main
 
 		private function createUi():void
 		{
-			userInterface = new UserInterface();
+			userInterface = new UserInterface(applicationData._hostList);
 			userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
 
 			userInterface.x = 0;
@@ -51,6 +51,12 @@ package main
 			applicationData._webServerUrl = userInterface._hostURL;
 
 			usersIdManger = new UsersIdManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
+			usersIdManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
+		}
+		
+		private function connectionIsReady(event:Event):void
+		{
+			applicationData.saveHost();
 		}
 	}
 }
