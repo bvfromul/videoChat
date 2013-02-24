@@ -63,26 +63,34 @@ package main
 			return cirrusDeveloperKey;
 		}
 		
-		public function saveHost():void
+		public function saveHost(hosts:Array):void
 		{
+			hostList = hosts;
+
 			if (hostList.length)
 			{
-				for(var count:int=0; count < hostList.length; count++)
+				if (checkUrl())
 				{
-					if (hostList[count] != webServerUrl)
-					{
-						writeHostInSO(webServerUrl);
-					}
-					else
-					{
-						break;
-					}
+					writeHostInSO(webServerUrl);
 				}
 			}
 			else
 			{
 				writeHostInSO(webServerUrl);
 			}
+		}
+		
+		private function checkUrl():Boolean
+		{
+			for(var count:int=0; count < hostList.length; count++)
+			{
+				if (hostList[count] == webServerUrl)
+				{
+					return false;
+				}
+			}
+			
+			return true;
 		}
 
 		private function writeHostInSO(host:String):void

@@ -32,11 +32,6 @@ package main
 			userInterface = new UserInterface(applicationData._hostList);
 			userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
 
-			userInterface.x = 0;
-			userInterface.y = 0;
-			userInterface.percentWidth = 100;
-			userInterface.percentHeight = 100;
-
 			addElement(userInterface);
 		}
 		
@@ -56,7 +51,7 @@ package main
 		
 		private function connectionIsReady(event:Event):void
 		{
-			applicationData.saveHost();
+			applicationData.saveHost(userInterface._currentHostsList);
 		}
 	}
 }

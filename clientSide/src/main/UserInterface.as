@@ -16,13 +16,20 @@ package main
 	{
 		private var hostURL:String;
 		private var userNick:String;
+		private var hostsArray:Array;
 		
 		public function UserInterface(hosts:Array)
 		{
-			showConnectInterface(hosts);
+			this.x = 0;
+			this.y = 0;
+			this.percentWidth = 100;
+			this.percentHeight = 100;
+			
+			hostsArray = hosts;
+			showConnectInterface();
 		}
 		
-		private function showConnectInterface(hosts:Array):void
+		private function showConnectInterface():void
 		{
 			var hostLabel:Label = new Label();
 			hostLabel.x = 214;
@@ -35,7 +42,8 @@ package main
 			hostList.x = 257;
 			hostList.y = 192;
 			hostList.id = 'hostList';
-			hostList.dataProvider = new ArrayCollection(hosts);
+			hostList.dataProvider = new ArrayCollection(hostsArray);
+			hostList.addEventListener(Event.CLEAR, testClear);
 			addElement(hostList);
 			
 			var nickLabel:Label = new Label();
@@ -62,9 +70,15 @@ package main
 			addElement(connectButton);
 		}
 		
+		private function testClear(event:Event):void
+		{
+			hostsArray.splice(event.currentTarget.selectedIndex, 1);
+			event.currentTarget.dataProvider = new ArrayCollection(hostsArray);
+		}
+		
 		private function insertDefaultNick(target:TextInput):void
 		{
-			target.text = 'nick_random' + (Math.round(Math.random() * 98) + 1).toString();			
+			target.text = 'nick_' + (Math.round(Math.random() * 98) + 1).toString();			
 		}
 
 		private function initConnection(event:MouseEvent):void
@@ -86,6 +100,11 @@ package main
 		public function get _hostURL():String
 		{
 			return hostURL;
+		}
+		
+		public function get _currentHostsList():Array
+		{
+			return hostsArray;
 		}
 	}
 }
