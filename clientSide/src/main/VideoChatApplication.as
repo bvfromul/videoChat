@@ -11,7 +11,7 @@ package main
 		private var applicationData:ApplicationData;
 		private var netStreamManager:NetStreamManager;
 		private var userInterface:UserInterface;
-		private var usersIdManger:UsersIdManager;
+		private var userHttpManger:UserHttpManager;
 		
 		public function VideoChatApplication() 
 		{
@@ -45,8 +45,8 @@ package main
 			applicationData._userNick = userInterface._userNick;
 			applicationData._webServerUrl = userInterface._hostURL;
 
-			usersIdManger = new UsersIdManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
-			usersIdManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
+			userHttpManger = new UserHttpManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
+			userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
 		}
 		
 		private function connectionIsReady(event:Event):void

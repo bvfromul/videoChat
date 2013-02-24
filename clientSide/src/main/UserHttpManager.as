@@ -7,14 +7,14 @@ package main
 	import mx.rpc.events.ResultEvent;
 	import mx.rpc.http.HTTPService;
 	
-	public class UsersIdManager extends EventDispatcher
+	public class UserHttpManager extends EventDispatcher
 	{
 		private var mHttpService:HTTPService;
 		private var webServerUrl:String;
 		private var peerID:String;
 		private var userNick:String;
 		
-		public function UsersIdManager(webUrl:String, peer:String, nick:String)
+		public function UserHttpManager(webUrl:String, peer:String, nick:String)
 		{
 			webServerUrl = webUrl;
 			peerID = peer;
