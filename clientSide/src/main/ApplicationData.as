@@ -65,26 +65,24 @@ package main
 		
 		public function saveHost(hosts:Array):void
 		{
-			hostList = hosts;
-
-			if (hostList.length)
+			if (hosts.length)
 			{
-				if (checkUrl())
+				if (checkUrl(hosts))
 				{
-					writeHostInSO(webServerUrl);
+					writeHostInSO(hosts, webServerUrl);
 				}
 			}
 			else
 			{
-				writeHostInSO(webServerUrl);
+				writeHostInSO(hosts, webServerUrl);
 			}
 		}
 		
-		private function checkUrl():Boolean
+		private function checkUrl(hosts:Array):Boolean
 		{
-			for(var count:int=0; count < hostList.length; count++)
+			for(var count:int=0; count < hosts.length; count++)
 			{
-				if (hostList[count] == webServerUrl)
+				if (hosts[count] == webServerUrl)
 				{
 					return false;
 				}
@@ -93,10 +91,10 @@ package main
 			return true;
 		}
 
-		private function writeHostInSO(host:String):void
+		private function writeHostInSO(hosts:Array, host:String):void
 		{
-			hostList.push(host);
-			sharedObject.data.hostList = hostList;
+			hosts.push(host);
+			sharedObject.data.hostList = hosts;
 			sharedObject.flush();
 		}
 		
