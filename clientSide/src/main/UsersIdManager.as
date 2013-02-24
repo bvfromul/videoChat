@@ -40,7 +40,14 @@ package main
 		
 		private function doUnregister():void
 		{
-			
+			if (mHttpService)
+			{
+				var request:Object = {};
+				request.username = userNick;
+				request.identity = "0";
+				mHttpService.cancel();
+				mHttpService.send(request);
+			}
 		}
 		
 		private function getAllPeers():void
