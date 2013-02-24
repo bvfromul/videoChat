@@ -9,7 +9,7 @@ class ServerSideOfVideoChat
             fwrite($fh, $content."\n");
             fclose($fh);
         }
-        elseif (is_writeable($file)) 
+        elseif (is_writeable($file))
         {
             $fh = fopen($file, 'a+'); 
             fwrite($fh, $content."\n");
@@ -37,7 +37,7 @@ class ServerSideOfVideoChat
 
         if (isset($_GET['identity']) && isset($_GET['username']))
         {
-            $this->returnResult($this->writeInFile($file, $_GET['identity'].' '.$_GET['username']));
+            $this->returnResult($this->writeInFile($file, $_GET['identity'].' '.$_GET['username'].' '.date("m.d.y").' '.date("H:i:s")));
         }
         else
         {
