@@ -28,7 +28,7 @@ class ServerSideOfVideoChat
     private function returnPeers($peers)
     {
         header('Content-type: text/plain');
-        for ($count = 0; $count <= count($peers); $count++)
+        for ($count = 0; $count < count($peers); $count++)
         {
             echo '<peer>'."\n".
                     '<id>'.$peers[$count]['peer'].'</id>'."\n".
@@ -59,22 +59,32 @@ class ServerSideOfVideoChat
 
     private function deleteOldPeers($array_of_peers)
     {
-        for ($count = 0; $count <= count($array_of_peers); $count++)
+        $currentTime =strtotime(date('Y-m-d H:i:s') . "-10 minutes");
+
+        for ($count = 0; $count < count($array_of_peers); $count++)
         {
             $datePeer = strtotime($array_of_peers[$count]['day'].' '.$array_of_peers[$count]['time']);
-            if ($datePeer >= strtotime("-10 minute") || $array_of_peers[$count]['peer'] == 0)
+            if ($datePeer < $currentTime || $array_of_peers[$count]['peer'] == 0)
             {
                 unset($array_of_peers[$count]);
             }
         }
 
-        return $array_of_peers;
+        return array_values($array_of_peers);
     }
 
     private function getPeers($file)
     {
         $array_of_peers = $this->deleteOldPeers($this->readPeers($file));
-        $this->returnPeers($array_of_peers);
+
+        if(count($array_of_peers) > 0)
+        {
+            $this->returnPeers($array_of_peers);
+        }
+        else
+        {
+            $this->returnResult('false');
+        }
     }
 
     public function ServerSideOfVideoChat()
