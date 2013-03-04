@@ -16,6 +16,26 @@ class ServerSideOfVideoChat
         }
     }
 
+    private function saveTopicalPeers($file, $peers)
+    {
+        if (is_writeable($file) || !file_exists($file))
+        {
+            $fh = fopen($file, 'w');
+
+            for ($count = 0; $count < count($peers); $count++)
+            {
+                fwrite($fh, "\n".$peers[$count]['peer'].' '.$peers[$count]['nick'].' '.$peers[$count]['day'] .' '.$peers[$count]['time']);
+            }
+
+            fclose($fh);
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
+    }
+
     private function returnResult($result)
     {
         header('Content-type: text/plain');
@@ -59,7 +79,7 @@ class ServerSideOfVideoChat
 
     private function deleteOldPeers($array_of_peers)
     {
-        $currentTime = strtotime(date('Y-m-d H:i:s') . "-10 minutes");
+        $currentTime = strtotime(date('Y-m-d H:i:s') . "-2 minutes");
         $countArrayItems = count($array_of_peers);
 
         for ($count = 0; $count < $countArrayItems; $count++)
@@ -76,11 +96,12 @@ class ServerSideOfVideoChat
 
     private function getPeers($file)
     {
-        $array_of_peers = $this->deleteOldPeers($this->readPeers($file));
+        $topicalPeers = $this->deleteOldPeers($this->readPeers($file));
 
-        if(count($array_of_peers) > 0)
+        if(count($topicalPeers) > 0)
         {
-            $this->returnPeers($array_of_peers);
+            $this->returnPeers($topicalPeers);
+            $this->saveTopicalPeers($file, $topicalPeers);
         }
         else
         {
