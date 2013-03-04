@@ -59,9 +59,10 @@ class ServerSideOfVideoChat
 
     private function deleteOldPeers($array_of_peers)
     {
-        $currentTime =strtotime(date('Y-m-d H:i:s') . "-10 minutes");
+        $currentTime = strtotime(date('Y-m-d H:i:s') . "-10 minutes");
+        $countArrayItems = count($array_of_peers);
 
-        for ($count = 0; $count < count($array_of_peers); $count++)
+        for ($count = 0; $count < $countArrayItems; $count++)
         {
             $datePeer = strtotime($array_of_peers[$count]['day'].' '.$array_of_peers[$count]['time']);
             if ($datePeer < $currentTime || $array_of_peers[$count]['peer'] == 0)
