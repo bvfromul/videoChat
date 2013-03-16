@@ -1,6 +1,44 @@
 <?php
 class ServerSideOfVideoChat
 {
+    private function processData($file, $id, $nick, $day, $time)
+    {
+        switch ($this->checkUserData($file, $id, $nick))
+        {
+            case 'update':
+                return $this->updateDate($file, $id, $nick, $day, $time);
+            break;
+
+            case 'error':
+                return 'busy nickname';
+            break;
+
+            case 'new':
+                return $this->writeInFile($file, $id.' '.$nick.' '.$day.' '.$time);
+            break;
+        }
+    }
+
+    private function updateDate($file, $id, $nick, $day, $time)
+    {
+        $recordedContent = file_get_contents($file);
+
+        $oldDate = substr($recordedContent, strpos($recordedContent, $id.' '.$nick) + strlen($id.' '.$nick) + 1, 17);
+        $recordedContent = str_replace($id.' '.$nick.' '.$oldDate, $id.' '.$nick.' '.$day.' '.$time, $recordedContent);
+
+        if (is_writeable($file) || !file_exists($file))
+        {
+            $fh = fopen($file, 'w');
+            fwrite($fh, $recordedContent);
+            fclose($fh);
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
+    }
+
     private function writeInFile($file, $content)
     {
         if (is_writeable($file) || !file_exists($file))
@@ -13,6 +51,27 @@ class ServerSideOfVideoChat
         else
         {
             return 'false';
+        }
+    }
+
+    private function checkUserData($file, $id, $nick)
+    {
+        $recordedContent = file_get_contents($file);
+
+        if (strpos($recordedContent, $nick) !== false)
+        {
+            if (strpos($recordedContent, $id.' '.$nick) !== false)
+            {
+                return 'update';
+            }
+            else
+            {
+                return 'error';
+            }
+        }
+        else
+        {
+            return 'new';
         }
     }
 
@@ -116,7 +175,7 @@ class ServerSideOfVideoChat
 
         if (isset($_GET['identity']) && isset($_GET['username']))
         {
-            $this->returnResult($this->writeInFile($file, $_GET['identity'].' '.$_GET['username'].' '.date("y-m-d").' '.date("H:i:s")));
+            $this->returnResult($this->processData($file, $_GET['identity'], $_GET['username'], date("y-m-d"), date("H:i:s")));
         }
         elseif (isset($_GET['get_peers']))
         {
