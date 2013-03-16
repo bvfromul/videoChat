@@ -112,10 +112,11 @@ class ServerSideOfVideoChat
     public function ServerSideOfVideoChat()
     {
         $file = 'peers';
+        date_default_timezone_set('Europe/Moscow');
 
         if (isset($_GET['identity']) && isset($_GET['username']))
         {
-            $this->returnResult($this->writeInFile($file, $_GET['identity'].' '.$_GET['username'].' '.date("m-d-y").' '.date("H:i:s")));
+            $this->returnResult($this->writeInFile($file, $_GET['identity'].' '.$_GET['username'].' '.date("y-m-d").' '.date("H:i:s")));
         }
         elseif (isset($_GET['get_peers']))
         {
