@@ -107,13 +107,15 @@ class ServerSideOfVideoChat
     private function returnPeers($peers)
     {
         header('Content-type: text/plain');
+        echo '<?xml version="1.0" encoding="utf-8"?>'."\n".'<peers>'."\n";
         for ($count = 0; $count < count($peers); $count++)
         {
             echo '<peer>'."\n".
                     '<id>'.$peers[$count]['peer'].'</id>'."\n".
                     '<nick>'.$peers[$count]['nick'].'</nick>'."\n".
-                 '</peer>';
+                 '</peer>'."\n";
         }
+        echo '</peers>';
     }
 
     private function readPeers($file)
