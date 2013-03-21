@@ -11,10 +11,12 @@ package main
 		private var peerID:String;
 		private var sharedObject:SharedObject;
 		private var hostList:Array;
+		private var peerList:Array;
 
 		public function ApplicationData()
 		{
 			hostList = [];
+			peerList = [];
 			sharedObject = SharedObject.getLocal('videoChat');
 			
 			if (sharedObject.data.hostList != null)
@@ -52,7 +54,17 @@ package main
 		{
 			return peerID;
 		}
-		
+
+		public function set _peerList(peers:Array):void
+		{
+			peerList = peers;
+		}
+
+		public function get _peerList():Array
+		{
+			return peerList;
+		}
+
 		public function get _cirrusURL():String
 		{
 			return cirrusURL;

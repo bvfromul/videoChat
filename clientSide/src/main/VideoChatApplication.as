@@ -47,11 +47,23 @@ package main
 
 			userHttpManger = new UserHttpManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
 			userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
+			userHttpManger.addEventListener('SUCCESS_GET_PEERS', peersIsReady);
 		}
 		
 		private function connectionIsReady(event:Event):void
 		{
 			applicationData.saveHost(userInterface._currentHostsList);
+		}
+
+		private function peersIsReady(event:Event):void
+		{
+			applicationData._peerList = userHttpManger._peersList;
+			initPeersConnection(applicationData._peerList);
+		}
+
+		private function initPeersConnection(peers:Array):void
+		{
+			
 		}
 	}
 }

@@ -31,6 +31,11 @@ package main
 			refreshConnectionTimer.start();
 		}
 
+		public function get _peersList():Array
+		{
+			return peersList;
+		}
+
 		private function refreshConnection(event:TimerEvent):void
 		{
 			if (mHttpService)
@@ -114,6 +119,9 @@ package main
 						peersList.push(strangerPeer);
 					}
 				}
+
+				dispatchEvent(new Event('SUCCESS_GET_PEERS'));
+
 			}
 			else
 			{
