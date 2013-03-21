@@ -2,6 +2,8 @@ package main
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import mx.rpc.events.FaultEvent;
 	import mx.rpc.events.ResultEvent;
@@ -14,6 +16,7 @@ package main
 		private var peerID:String;
 		private var userNick:String;
 		private var peersList:Array;
+		private var refreshConnectionTimer:Timer;
 		
 		public function UserHttpManager(webUrl:String, peer:String, nick:String)
 		{
@@ -22,6 +25,22 @@ package main
 			userNick = nick;
 
 			doRegister();
+
+			refreshConnectionTimer = new Timer(1000 * 90);
+			refreshConnectionTimer.addEventListener(TimerEvent.TIMER, refreshConnection);
+			refreshConnectionTimer.start();
+		}
+
+		private function refreshConnection(event:TimerEvent):void
+		{
+			if (mHttpService)
+			{
+				var request:Object = {};
+				request.username = userNick;
+				request.identity = peerID;
+				mHttpService.cancel();
+				mHttpService.send(request);
+			}
 		}
 		
 		private function doRegister():void
@@ -48,6 +67,12 @@ package main
 				request.identity = "0";
 				mHttpService.cancel();
 				mHttpService.send(request);
+			}
+
+			if (refreshConnectionTimer)
+			{
+				refreshConnectionTimer.stop();
+				refreshConnectionTimer = null;
 			}
 		}
 		
