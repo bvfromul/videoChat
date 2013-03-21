@@ -84,7 +84,10 @@ package main
 
 				for each (var strangerPeer:Object in result.peers)
 				{
-					peersList.push(strangerPeer);
+					if (strangerPeer.id != peerID)
+					{
+						peersList.push(strangerPeer);
+					}
 				}
 			}
 			else
