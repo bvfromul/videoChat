@@ -5,6 +5,7 @@ package main
 	import flash.events.MouseEvent;
 	
 	import mx.collections.ArrayCollection;
+	import mx.controls.Alert;
 	
 	import spark.components.Button;
 	import spark.components.ComboBox;
@@ -105,6 +106,11 @@ package main
 		public function get _currentHostsList():Array
 		{
 			return hostsArray;
+		}
+		
+		public function showError(errorString:String):void
+		{
+			Alert.show(errorString, 'Произошла ошибка', Alert.OK, this);
 		}
 	}
 }

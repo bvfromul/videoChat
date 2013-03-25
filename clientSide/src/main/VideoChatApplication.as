@@ -24,10 +24,10 @@ package main
 			netStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
 			netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
 
-			createUi();
+			createconnectionUi();
 		}
 
-		private function createUi():void
+		private function createconnectionUi():void
 		{
 			userInterface = new UserInterface(applicationData._hostList);
 			userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
@@ -48,6 +48,12 @@ package main
 			userHttpManger = new UserHttpManager(applicationData._webServerUrl, applicationData._peerID, applicationData._userNick);
 			userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
 			userHttpManger.addEventListener('SUCCESS_GET_PEERS', peersIsReady);
+			userHttpManger.addEventListener('USERSHTTP_ERROR', userHttpError);
+		}
+		
+		private function userHttpError(event:Event):void
+		{
+			userInterface.showError(userHttpManger._errorString);
 		}
 		
 		private function connectionIsReady(event:Event):void

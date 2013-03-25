@@ -17,6 +17,7 @@ package main
 		private var userNick:String;
 		private var peersList:Array;
 		private var refreshConnectionTimer:Timer;
+		private var errorString:String;
 		
 		public function UserHttpManager(webUrl:String, peer:String, nick:String)
 		{
@@ -34,6 +35,11 @@ package main
 		public function get _peersList():Array
 		{
 			return peersList;
+		}
+		
+		public function get _errorString():String
+		{
+			return errorString;
 		}
 
 		private function refreshConnection(event:TimerEvent):void
@@ -98,14 +104,26 @@ package main
 			
 			if (result.hasOwnProperty("result"))
 			{
-				if (result.result.update == true)
+				if (result.result.update is Boolean)
 				{
-					dispatchEvent(new Event('SUCCESS_CONNECT'));
-					getAllPeers();
+					if (result.result.update == true)
+					{
+						dispatchEvent(new Event('SUCCESS_CONNECT'));
+						getAllPeers();
+					}
+					else
+					{
+						errorString = 'Ошибка соединения';
+						dispatchEvent(new Event('USERSHTTP_ERROR'));
+					}
 				}
-				else
+				else if (result.result.update is String)
 				{
-					trace('fail');
+					if (result.result.update == 'busy nickname')
+					{
+						errorString = 'Данный ник уже используется';
+						dispatchEvent(new Event('USERSHTTP_ERROR'));
+					}
 				}
 			}
 			else if (result.hasOwnProperty("peers"))
@@ -121,17 +139,18 @@ package main
 				}
 
 				dispatchEvent(new Event('SUCCESS_GET_PEERS'));
-
 			}
 			else
 			{
-				trace('fail');
+				errorString = 'Ошибка соединения';
+				dispatchEvent(new Event('USERSHTTP_ERROR'));
 			}
 		}
 		
 		private function httpFault(event:FaultEvent):void
 		{
-			trace('fail');
+			errorString = 'Ошибка соединения';
+			dispatchEvent(new Event('USERSHTTP_ERROR'));
 		}
 	}
 }
