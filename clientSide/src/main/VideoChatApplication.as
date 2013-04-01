@@ -24,10 +24,10 @@ package main
             netStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
             netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
 
-            createconnectionUi();
+            createConnectionUi();
         }
 
-        private function createconnectionUi():void
+        private function createConnectionUi():void
         {
             userInterface = new UserInterface(applicationData._hostList);
             userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
@@ -64,12 +64,18 @@ package main
         private function peersIsReady(event:Event):void
         {
             applicationData._peerList = userHttpManger._peersList;
+            showVideoAndChatUi(applicationData._peerList.length);
             initPeersConnection(applicationData._peerList);
         }
 
         private function initPeersConnection(peers:Array):void
         {
 
+        }
+
+        private function showVideoAndChatUi(peersCount:int):void
+        {
+            userInterface.showVideoAndChatUi(peersCount);
         }
     }
 }

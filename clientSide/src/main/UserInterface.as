@@ -11,7 +11,9 @@ package main
     import spark.components.ComboBox;
     import spark.components.Group;
     import spark.components.Label;
+    import spark.components.TextArea;
     import spark.components.TextInput;
+    import spark.components.VideoDisplay;
 
     public class UserInterface extends Group
     {
@@ -111,6 +113,84 @@ package main
         public function showError(errorString:String):void
         {
             Alert.show(errorString, 'Произошла ошибка', Alert.OK, this);
+        }
+
+        public function showVideoAndChatUi(peersCount:int):void
+        {
+            removeAllElements();
+
+            var videoStatusLabel:Label = new Label();
+            videoStatusLabel.x = 217;
+            videoStatusLabel.y = 41;
+            videoStatusLabel.text = 'waiting';
+            videoStatusLabel.id = 'videoStatusLabel';
+            addElement(videoStatusLabel);
+
+            var chatStatusLabel:Label = new Label();
+            chatStatusLabel.x = 695;
+            chatStatusLabel.y = 41;
+            chatStatusLabel.text = 'waiting';
+            chatStatusLabel.id = 'chatStatusLabel';
+            addElement(chatStatusLabel);
+
+            var videoDisplay:VideoDisplay = new VideoDisplay();
+            videoDisplay.width = 374;
+            videoDisplay.height = 229;
+            videoDisplay.x = 65;
+            videoDisplay.y = 62;
+            videoDisplay.id = 'videoDisplay';
+            addElement(videoDisplay);
+
+            var reconnectButton:Button = new Button();
+            reconnectButton.x = 62;
+            reconnectButton.y = 331;
+            reconnectButton.label = 'reconnect';
+            reconnectButton.id = 'reconnectButton';
+            addElement(reconnectButton);
+
+            var playButton:Button = new Button();
+            playButton.x = 217;
+            playButton.y = 331;
+            playButton.label = 'play';
+            playButton.id = 'playButton';
+            addElement(playButton);
+
+            var pauseButton:Button = new Button();
+            pauseButton.x = 366;
+            pauseButton.y = 331;
+            pauseButton.label = 'pause';
+            pauseButton.id = 'pauseButton';
+            addElement(pauseButton);
+
+            var playList:ComboBox = new ComboBox();
+            playList.x = 62;
+            playList.y = 394;
+            playList.width = 374;
+            playList.id = 'palyList';
+            addElement(playList);
+
+            var chat:TextArea = new TextArea();
+            chat.x = 531;
+            chat.y = 61;
+            chat.width = 361;
+            chat.height = 356;
+            chat.id = 'chat';
+            addElement(chat);
+
+            var message:TextArea = new TextArea();
+            message.x = 531;
+            message.y = 442;
+            message.width = 361;
+            message.height = 108;
+            message.id = 'message';
+            addElement(message);
+
+            var sendButton:Button = new Button();
+            sendButton.x = 882;
+            sendButton.y = 572;
+            sendButton.label = 'send';
+            sendButton.id = 'sendButton';
+            addElement(sendButton);
         }
     }
 }
