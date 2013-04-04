@@ -135,7 +135,14 @@ class ServerSideOfVideoChat
             $i++;
         } while ($i!==false);
 
-        return $array_of_peers;
+        if(isset($array_of_peers))
+        {
+            return $array_of_peers;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private function deleteOldPeers($array_of_peers)
@@ -157,11 +164,15 @@ class ServerSideOfVideoChat
 
     private function getPeers($file)
     {
-        $topicalPeers = $this->deleteOldPeers($this->readPeers($file));
+        $topicalPeers = $this->readPeers($file);
 
-        if(count($topicalPeers) > 0)
+        if($topicalPeers)
         {
-            $this->returnPeers($topicalPeers);
+            $topicalPeers = $this->deleteOldPeers($topicalPeers);
+            if (count($topicalPeers) > 0)
+            {
+                $this->returnPeers($topicalPeers);
+            }
             $this->saveTopicalPeers($file, $topicalPeers);
         }
         else
