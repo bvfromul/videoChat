@@ -1,9 +1,9 @@
 package main
 {
     import flash.events.Event;
-
+    
     import mx.events.FlexEvent;
-
+    
     import spark.components.Application;
 
     public class VideoChatApplication extends Application
@@ -63,8 +63,12 @@ package main
 
         private function peersIsReady(event:Event):void
         {
+            var isNewConnecion:Boolean = !(applicationData._peerList.length as Boolean);
             applicationData._peerList = userHttpManger._peersList;
-            showVideoAndChatUi(applicationData._peerList.length);
+            if (isNewConnecion)
+            {
+                showVideoAndChatUi(applicationData._peerList.length);
+            }
             initPeersConnection(applicationData._peerList);
         }
 
