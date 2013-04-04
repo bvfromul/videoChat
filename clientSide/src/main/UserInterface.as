@@ -3,10 +3,10 @@ package main
     import flash.display.DisplayObjectContainer;
     import flash.events.Event;
     import flash.events.MouseEvent;
-
+    
     import mx.collections.ArrayCollection;
     import mx.controls.Alert;
-
+    
     import spark.components.Button;
     import spark.components.ComboBox;
     import spark.components.Group;
@@ -186,7 +186,7 @@ package main
             addElement(message);
 
             var sendButton:Button = new Button();
-            sendButton.x = 882;
+            sendButton.x = 820;
             sendButton.y = 572;
             sendButton.label = 'send';
             sendButton.id = 'sendButton';
