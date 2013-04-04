@@ -4,7 +4,7 @@ package main
     import flash.events.EventDispatcher;
     import flash.events.TimerEvent;
     import flash.utils.Timer;
-
+    
     import mx.rpc.events.FaultEvent;
     import mx.rpc.events.ResultEvent;
     import mx.rpc.http.HTTPService;
@@ -49,6 +49,7 @@ package main
                 var request:Object = {};
                 request.username = userNick;
                 request.identity = peerID;
+                request.anticache = Math.random();
                 mHttpService.cancel();
                 mHttpService.send(request);
             }
@@ -65,6 +66,7 @@ package main
             var request:Object = {};
             request.username = userNick;
             request.identity = peerID;
+            request.anticache = Math.random();
             mHttpService.cancel();
             mHttpService.send(request);
         }
@@ -93,6 +95,7 @@ package main
             {
                 var request:Object = {};
                 request.get_peers = 1;
+                request.anticache = Math.random();
                 mHttpService.cancel();
                 mHttpService.send(request);
             }
@@ -132,9 +135,16 @@ package main
 
                 for each (var strangerPeer:Object in result.peers)
                 {
-                    if (strangerPeer.id != peerID)
+                    if (strangerPeer.length)
                     {
-                        peersList.push(strangerPeer);
+                        var key:String;
+                        for (key in strangerPeer)
+                        {
+                            if (strangerPeer[key].id != peerID)
+                            {
+                                peersList.push(strangerPeer[key]);
+                            }
+                        }
                     }
                 }
 
