@@ -69,12 +69,7 @@ package main
             {
                 showVideoAndChatUi(applicationData._peerList.length);
             }
-            initPeersConnection(applicationData._peerList);
-        }
-
-        private function initPeersConnection(peers:Array):void
-        {
-
+            netStreamManager.initStreams(applicationData._peerList, isNewConnecion);
         }
 
         private function showVideoAndChatUi(peersCount:int):void
