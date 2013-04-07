@@ -21,6 +21,13 @@ package main
         private var userNick:String;
         private var hostsArray:Array;
 
+        private var sendButton:Button;
+        private var reconnectButton:Button;
+        private var playButton:Button;
+        private var pauseButton:Button;
+        private var videoStatusLabel:Label;
+        private var chatStatusLabel:Label;
+
         public function UserInterface(hosts:Array)
         {
             this.x = 0;
@@ -119,17 +126,17 @@ package main
         {
             removeAllElements();
 
-            var videoStatusLabel:Label = new Label();
+            videoStatusLabel = new Label();
             videoStatusLabel.x = 217;
             videoStatusLabel.y = 41;
-            videoStatusLabel.text = 'waiting';
+            videoStatusLabel.text = 'waiting  connection';
             videoStatusLabel.id = 'videoStatusLabel';
             addElement(videoStatusLabel);
 
-            var chatStatusLabel:Label = new Label();
+            chatStatusLabel = new Label();
             chatStatusLabel.x = 695;
             chatStatusLabel.y = 41;
-            chatStatusLabel.text = 'waiting';
+            chatStatusLabel.text = 'waiting connection';
             chatStatusLabel.id = 'chatStatusLabel';
             addElement(chatStatusLabel);
 
@@ -141,25 +148,28 @@ package main
             videoDisplay.id = 'videoDisplay';
             addElement(videoDisplay);
 
-            var reconnectButton:Button = new Button();
+            reconnectButton = new Button();
             reconnectButton.x = 62;
             reconnectButton.y = 331;
             reconnectButton.label = 'reconnect';
             reconnectButton.id = 'reconnectButton';
+            reconnectButton.enabled = false;
             addElement(reconnectButton);
 
-            var playButton:Button = new Button();
+            playButton = new Button();
             playButton.x = 217;
             playButton.y = 331;
             playButton.label = 'play';
             playButton.id = 'playButton';
+            playButton.enabled = false;
             addElement(playButton);
 
-            var pauseButton:Button = new Button();
+            pauseButton = new Button();
             pauseButton.x = 366;
             pauseButton.y = 331;
             pauseButton.label = 'pause';
             pauseButton.id = 'pauseButton';
+            pauseButton.enabled = false;
             addElement(pauseButton);
 
             var playList:ComboBox = new ComboBox();
@@ -175,6 +185,7 @@ package main
             chat.width = 361;
             chat.height = 356;
             chat.id = 'chat';
+            chat.editable = false;
             addElement(chat);
 
             var message:TextArea = new TextArea();
@@ -185,11 +196,12 @@ package main
             message.id = 'message';
             addElement(message);
 
-            var sendButton:Button = new Button();
+            sendButton = new Button();
             sendButton.x = 820;
             sendButton.y = 572;
             sendButton.label = 'send';
             sendButton.id = 'sendButton';
+            sendButton.enabled = false;
             addElement(sendButton);
         }
     }
