@@ -11,7 +11,7 @@ package main
         private var peerId:String;
         private var netConnection:NetConnection;
         private var sendStream:NetStream;
-        private var recvStreams:Array;
+        private var recvStreams:Array = [];
 
         public function NetStreamManager(cirrusUrl:String, developerKey:String)
         {
@@ -61,15 +61,42 @@ package main
 
         private function initRecvStreams(strangerPeers:Array):void
         {
-            recvStreams = [];
             var key:String;
 
             for (key in strangerPeers)
             {
-                var recvStream:NetStream = new NetStream(netConnection, strangerPeers[key].id);
-                recvStream.play("media");
-                recvStream.client = this;
-                recvStreams[key] = recvStream;
+                if (recvStreams[strangerPeers[key].id])
+                {
+                    recvStreams[strangerPeers[key].id].isUpdate = 1;
+                }
+                else
+                {
+                    var recvStream:NetStream = new NetStream(netConnection, strangerPeers[key].id);
+                    recvStream.play("media");
+                    recvStream.client = this;
+                    recvStreams[strangerPeers[key].id].recvStream = recvStream;
+                    recvStreams[strangerPeers[key].id].nick = strangerPeers[key].nick;
+                    recvStreams[strangerPeers[key].id].isConnected = 0;
+                    recvStreams[strangerPeers[key].id].isUpdate = 1;
+                }
+            }
+            deleteOldStreams();
+        }
+
+        private function deleteOldStreams():void
+        {
+            var key:String;
+
+            for (key in recvStreams)
+            {
+                if (recvStreams[key].isUpdate == 0)
+                {
+                    recvStreams.splice(recvStreams.indexOf(recvStreams[key]),1);
+                }
+                else
+                {
+                    recvStreams[key].isUpdate == 0;
+                }
             }
         }
     }
