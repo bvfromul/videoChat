@@ -27,6 +27,7 @@ package main
         private var pauseButton:Button;
         private var videoStatusLabel:Label;
         private var chatStatusLabel:Label;
+        private var chat:TextArea;
 
         public function UserInterface(hosts:Array)
         {
@@ -179,13 +180,13 @@ package main
             playList.id = 'palyList';
             addElement(playList);
 
-            var chat:TextArea = new TextArea();
+            chat = new TextArea();
             chat.x = 531;
             chat.y = 61;
             chat.width = 361;
             chat.height = 356;
-            chat.id = 'chat';
             chat.editable = false;
+            chat.id = 'chat';
             addElement(chat);
 
             var message:TextArea = new TextArea();
@@ -203,6 +204,11 @@ package main
             sendButton.id = 'sendButton';
             sendButton.enabled = false;
             addElement(sendButton);
+        }
+
+        public function addChatMessage(message:String):void
+        {
+            chat.appendText(message + "\n");
         }
     }
 }

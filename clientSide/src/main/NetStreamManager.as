@@ -8,10 +8,11 @@ package main
 
     public class NetStreamManager extends EventDispatcher
     {
+        private var textareaMessage:String;
         private var peerId:String;
         private var netConnection:NetConnection;
         private var sendStream:NetStream;
-        private var recvStreams:Array = [];
+        private var recvStreams:Object = {};
 
         public function NetStreamManager(cirrusUrl:String, developerKey:String)
         {
@@ -48,15 +49,8 @@ package main
         private function initSendStream():void
         {
             sendStream = new NetStream(netConnection, NetStream.DIRECT_CONNECTIONS);
+            sendStream.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
             sendStream.publish("media");
-
-            var sendStreamClient:Object = {};
-
-            sendStreamClient.onPeerConnect = function(callerns:NetStream):Boolean{
-                return true;
-            }
-
-            sendStream.client = sendStreamClient;
         }
 
         private function initRecvStreams(strangerPeers:Array):void
@@ -71,16 +65,24 @@ package main
                 }
                 else
                 {
-                    var recvStream:NetStream = new NetStream(netConnection, strangerPeers[key].id);
-                    recvStream.play("media");
-                    recvStream.client = this;
-                    recvStreams[strangerPeers[key].id].recvStream = recvStream;
+                    recvStreams[strangerPeers[key].id] = {}
+
+                    recvStreams[strangerPeers[key].id].recvStream = new NetStream(netConnection, strangerPeers[key].id);
+                    recvStreams[strangerPeers[key].id].recvStream.play("media");
+                    recvStreams[strangerPeers[key].id].recvStream.client = this;
+                    recvStreams[strangerPeers[key].id].recvStream.addEventListener(NetStatusEvent.NET_STATUS,netStatusHandler);
+
                     recvStreams[strangerPeers[key].id].nick = strangerPeers[key].nick;
                     recvStreams[strangerPeers[key].id].isConnected = 0;
                     recvStreams[strangerPeers[key].id].isUpdate = 1;
                 }
             }
             deleteOldStreams();
+            sendSomeData('/ping ' + peerId);
+        }
+
+        private function netStatusHandler(event:NetStatusEvent):void{
+            trace(event.info.code);
         }
 
         private function deleteOldStreams():void
@@ -98,6 +100,38 @@ package main
                     recvStreams[key].isUpdate == 0;
                 }
             }
+        }
+
+        public function receiveSomeData(message:String):void
+        {
+            textareaMessage = '';
+
+            switch (message.substring(0, 5))
+            {
+                case '/ping':
+                    var peer:String = message.substr(6, message.length);
+                    if (recvStreams[peer])
+                    {
+                        recvStreams[peer].isConnected = 1;
+                        textareaMessage = recvStreams[peer].nick + ' connected';
+                    }
+                break;
+            }
+
+            if (textareaMessage.length)
+            {
+                dispatchEvent(new Event('TEXTAREA_MESSAGE_IS_READY'));
+            }
+        }
+
+        public function sendSomeData(message:String):void
+        {
+            sendStream.send("receiveSomeData", message);
+        }
+
+        public function get _textareaMessage():String
+        {
+            return textareaMessage;
         }
     }
 }

@@ -23,6 +23,7 @@ package main
             applicationData = new ApplicationData();
             netStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
             netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
+            netStreamManager.addEventListener('TEXTAREA_MESSAGE_IS_READY', sendTextareaMessagetoUI);
 
             createConnectionUi();
         }
@@ -63,7 +64,16 @@ package main
 
         private function peersIsReady(event:Event):void
         {
-            var isNewConnecion:Boolean = !(applicationData._peerList.length as Boolean);
+            var isNewConnecion:Boolean;
+            if (applicationData._peerList.length)
+            {
+                isNewConnecion = false;
+            }
+            else
+            {
+                isNewConnecion = true;
+            }
+
             applicationData._peerList = userHttpManger._peersList;
             if (isNewConnecion)
             {
@@ -75,6 +85,11 @@ package main
         private function showVideoAndChatUi(peersCount:int):void
         {
             userInterface.showVideoAndChatUi(peersCount);
+        }
+
+        private function sendTextareaMessagetoUI(event:Event):void
+        {
+            userInterface.addChatMessage(netStreamManager._textareaMessage);
         }
     }
 }
