@@ -22,14 +22,17 @@ package main
         private function initNetConnection(cirrusUrl:String, developerKey:String):void
         {
             netConnection = new NetConnection();
-            netConnection.addEventListener(NetStatusEvent.NET_STATUS,netConnectionStatus);
+            netConnection.addEventListener(NetStatusEvent.NET_STATUS, netConnectionStatus);
             netConnection.connect(cirrusUrl + developerKey);
         }
 
         private function netConnectionStatus(event:NetStatusEvent):void
         {
-            peerId = netConnection.nearID;
-            dispatchEvent(new Event('PEERID_READY'));
+            if (event.info.code == 'NetConnection.Connect.Success')
+            {
+                peerId = netConnection.nearID;
+                dispatchEvent(new Event('PEERID_READY'));
+            }
         }
 
         public function get _peerId():String
