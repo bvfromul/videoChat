@@ -121,7 +121,6 @@ package main
                     case '/ping':
                         if (recvStreams[peer].isConnected == 0)
                         {
-                            trace(peer);
                             textareaMessage.text = ' connected';
                             recvStreams[peer].isConnected = 1;
                         }

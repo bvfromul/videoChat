@@ -2,6 +2,7 @@ package main
 {
     import flash.display.DisplayObjectContainer;
     import flash.events.Event;
+    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.text.TextField;
     import flash.text.TextFormat;
@@ -16,6 +17,7 @@ package main
     import spark.components.Label;
     import spark.components.TextArea;
     import spark.components.TextInput;
+    import spark.components.VScrollBar;
     import spark.components.VideoDisplay;
 
     public class UserInterface extends Group
@@ -187,7 +189,7 @@ package main
             addElement(playList);
 
             var container:UIComponent = new UIComponent();
-            addElement( container );
+            addElement(container);
             chat = new TextField();
             chat.x = 531;
             chat.y = 61;
@@ -229,6 +231,7 @@ package main
                 sendButton.enabled = true;
                 sendButton.addEventListener(MouseEvent.CLICK, sendTextMessage);
                 chatStatusLabel.text = 'connected';
+                outcomingMessageTextArea.addEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
             }
         }
 
@@ -245,7 +248,16 @@ package main
             chat.setTextFormat(nickFormat, chat.text.lastIndexOf(': ' + message), chat.text.lastIndexOf(': ' + message) + (': ' + message).length);
         }
 
-        private function sendTextMessage(event:Event):void
+        private function outcomingMessageTextAreaKeyUp(event:KeyboardEvent):void
+        {
+            trace(event.keyCode);
+            if (event.keyCode == 13 && event.ctrlKey)
+            {
+                sendTextMessage();
+            }
+        }
+
+        private function sendTextMessage(event:Event=null):void
         {
             outcomingMessage = outcomingMessageTextArea.text;
             dispatchEvent(new Event('OUTCOMING_MESSAGE'));
