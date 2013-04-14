@@ -8,7 +8,7 @@ package main
 
     public class NetStreamManager extends EventDispatcher
     {
-        private var textareaMessage:String;
+        private var textareaMessage:Object;
         private var peerId:String;
         private var netConnection:NetConnection;
         private var sendStream:NetStream;
@@ -107,7 +107,7 @@ package main
 
         public function receiveSomeData(message:String):void
         {
-            textareaMessage = '';
+            textareaMessage = {};
 
             switch (message.substring(0, 5))
             {
@@ -116,12 +116,14 @@ package main
                     if (recvStreams[peer])
                     {
                         recvStreams[peer].isConnected = 1;
-                        textareaMessage = recvStreams[peer].nick + ' connected';
+                        textareaMessage.nick = recvStreams[peer].nick;
+                        textareaMessage.text = ' connected';
+                        textareaMessage.nickColor = peer.substr(0, 6);
                     }
                 break;
             }
 
-            if (textareaMessage.length)
+            if (textareaMessage.text.length)
             {
                 dispatchEvent(new Event('TEXTAREA_MESSAGE_IS_READY'));
             }
@@ -132,7 +134,7 @@ package main
             sendStream.send("receiveSomeData", message);
         }
 
-        public function get _textareaMessage():String
+        public function get _textareaMessage():Object
         {
             return textareaMessage;
         }

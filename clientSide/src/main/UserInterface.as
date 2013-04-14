@@ -3,9 +3,12 @@ package main
     import flash.display.DisplayObjectContainer;
     import flash.events.Event;
     import flash.events.MouseEvent;
+    import flash.text.TextField;
+    import flash.text.TextFormat;
     
     import mx.collections.ArrayCollection;
     import mx.controls.Alert;
+    import mx.core.UIComponent;
     
     import spark.components.Button;
     import spark.components.ComboBox;
@@ -27,7 +30,8 @@ package main
         private var pauseButton:Button;
         private var videoStatusLabel:Label;
         private var chatStatusLabel:Label;
-        private var chat:TextArea;
+        private var chat:TextField;
+        private var defaultChatTextFormat:TextFormat;
 
         public function UserInterface(hosts:Array)
         {
@@ -180,14 +184,16 @@ package main
             playList.id = 'palyList';
             addElement(playList);
 
-            chat = new TextArea();
+            var container:UIComponent = new UIComponent();
+            addElement( container );
+            chat = new TextField();
             chat.x = 531;
             chat.y = 61;
             chat.width = 361;
             chat.height = 356;
-            chat.editable = false;
-            chat.id = 'chat';
-            addElement(chat);
+            chat.border = true;
+            container.addChild(chat);
+            defaultChatTextFormat = chat.getTextFormat();
 
             var message:TextArea = new TextArea();
             message.x = 531;
@@ -206,9 +212,16 @@ package main
             addElement(sendButton);
         }
 
-        public function addChatMessage(message:String):void
+        public function addChatMessage(message:Object):void
         {
-            chat.appendText(message + "\n");
+
+            chat.appendText(message.nick + message.text + "\n");
+
+            var nickFormat:TextFormat = defaultChatTextFormat;
+            nickFormat.color = '0x' + message.nickColor;
+            chat.setTextFormat(nickFormat, chat.text.lastIndexOf(message.nick), chat.text.lastIndexOf(message.nick) + message.nick.length);
+            nickFormat.color = 0x000000;
+            chat.setTextFormat(nickFormat, chat.text.lastIndexOf(message.text), chat.text.lastIndexOf(message.text) + message.text.length);
         }
     }
 }
