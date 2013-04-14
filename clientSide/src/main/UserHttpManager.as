@@ -27,7 +27,7 @@ package main
 
             doRegister();
 
-            refreshConnectionTimer = new Timer(1000 * 60);
+            refreshConnectionTimer = new Timer(1000 * 30);
             refreshConnectionTimer.addEventListener(TimerEvent.TIMER, refreshConnection);
             refreshConnectionTimer.start();
         }

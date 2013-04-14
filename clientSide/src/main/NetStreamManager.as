@@ -81,7 +81,7 @@ package main
                 }
             }
             deleteOldStreams();
-            sendSomeData('/ping ' + peerId);
+            sendSomeData('ping');
         }
 
         private function netStatusHandler(event:NetStatusEvent):void{
@@ -108,30 +108,55 @@ package main
         public function receiveSomeData(message:String):void
         {
             textareaMessage = {};
+            var peer:String = message.substr(6, peerId.length);
+            textareaMessage.text = '';
 
-            switch (message.substring(0, 5))
+            if (recvStreams[peer])
             {
-                case '/ping':
-                    var peer:String = message.substr(6, message.length);
-                    if (recvStreams[peer])
-                    {
-                        recvStreams[peer].isConnected = 1;
-                        textareaMessage.nick = recvStreams[peer].nick;
-                        textareaMessage.text = ' connected';
-                        textareaMessage.nickColor = peer.substr(0, 6);
-                    }
-                break;
-            }
+                textareaMessage.nick = recvStreams[peer].nick;
+                textareaMessage.nickColor = peer.substr(0, 6);
 
-            if (textareaMessage.text.length)
-            {
-                dispatchEvent(new Event('TEXTAREA_MESSAGE_IS_READY'));
+                switch (message.substr(peer.length + 7, 5))
+                {
+                    case '/ping':
+                        if (recvStreams[peer].isConnected == 0)
+                        {
+                            trace(peer);
+                            textareaMessage.text = ' connected';
+                            recvStreams[peer].isConnected = 1;
+                        }
+                    break;
+
+                    case '/text':
+                        textareaMessage.text = ': ' + message.substring(peer.length + 13, message.length);
+                    break;
+                }
+
+                if (textareaMessage.text.length)
+                {
+                    dispatchEvent(new Event('INCOMING_MESSAGE'));
+                }
             }
         }
 
-        public function sendSomeData(message:String):void
+        public function sendSomeData(type:String, message:String = ''):void
         {
-            sendStream.send("receiveSomeData", message);
+            var string:String = ''
+            switch (type)
+            {
+                case 'ping':
+                    string = '/from ' + peerId + ' /ping';
+                break;
+
+                case 'text':
+                    string = '/from ' + peerId + ' /text ' + message;
+                break;
+            }
+
+            if (string.length)
+            {
+                sendStream.send("receiveSomeData", string);
+            }
         }
 
         public function get _textareaMessage():Object

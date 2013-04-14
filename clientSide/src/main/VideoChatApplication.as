@@ -23,7 +23,7 @@ package main
             applicationData = new ApplicationData();
             netStreamManager = new NetStreamManager(applicationData._cirrusURL, applicationData._cirrusDeveloperKey);
             netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
-            netStreamManager.addEventListener('TEXTAREA_MESSAGE_IS_READY', sendTextareaMessagetoUI);
+            netStreamManager.addEventListener('INCOMING_MESSAGE', sendTextareaMessagetoUI);
 
             createConnectionUi();
         }
@@ -32,6 +32,7 @@ package main
         {
             userInterface = new UserInterface(applicationData._hostList);
             userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
+            userInterface.addEventListener('OUTCOMING_MESSAGE', sendMessage);
 
             addElement(userInterface);
         }
@@ -89,7 +90,12 @@ package main
 
         private function sendTextareaMessagetoUI(event:Event):void
         {
-            userInterface.addChatMessage(netStreamManager._textareaMessage);
+            userInterface.addStrangerChatMessage(netStreamManager._textareaMessage);
+        }
+
+        private function sendMessage(event:Event):void
+        {
+            netStreamManager.sendSomeData('text', userInterface._outcomingMessage);
         }
     }
 }

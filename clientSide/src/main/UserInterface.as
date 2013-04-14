@@ -32,6 +32,8 @@ package main
         private var chatStatusLabel:Label;
         private var chat:TextField;
         private var defaultChatTextFormat:TextFormat;
+        private var outcomingMessage:String;
+        private var outcomingMessageTextArea:TextArea;
 
         public function UserInterface(hosts:Array)
         {
@@ -195,13 +197,13 @@ package main
             container.addChild(chat);
             defaultChatTextFormat = chat.getTextFormat();
 
-            var message:TextArea = new TextArea();
-            message.x = 531;
-            message.y = 442;
-            message.width = 361;
-            message.height = 108;
-            message.id = 'message';
-            addElement(message);
+            outcomingMessageTextArea = new TextArea();
+            outcomingMessageTextArea.x = 531;
+            outcomingMessageTextArea.y = 442;
+            outcomingMessageTextArea.width = 361;
+            outcomingMessageTextArea.height = 108;
+            outcomingMessageTextArea.id = 'message';
+            addElement(outcomingMessageTextArea);
 
             sendButton = new Button();
             sendButton.x = 820;
@@ -212,9 +214,8 @@ package main
             addElement(sendButton);
         }
 
-        public function addChatMessage(message:Object):void
+        public function addStrangerChatMessage(message:Object):void
         {
-
             chat.appendText(message.nick + message.text + "\n");
 
             var nickFormat:TextFormat = defaultChatTextFormat;
@@ -222,6 +223,39 @@ package main
             chat.setTextFormat(nickFormat, chat.text.lastIndexOf(message.nick), chat.text.lastIndexOf(message.nick) + message.nick.length);
             nickFormat.color = 0x000000;
             chat.setTextFormat(nickFormat, chat.text.lastIndexOf(message.text), chat.text.lastIndexOf(message.text) + message.text.length);
+
+            if (!sendButton.enabled)
+            {
+                sendButton.enabled = true;
+                sendButton.addEventListener(MouseEvent.CLICK, sendTextMessage);
+                chatStatusLabel.text = 'connected';
+            }
+        }
+
+        private function addMyChatMessage(message:String):void
+        {
+            chat.appendText('you');
+
+            var nickFormat:TextFormat = defaultChatTextFormat;
+            nickFormat.bold = true;
+            chat.setTextFormat(nickFormat, chat.text.lastIndexOf('you'), chat.text.lastIndexOf('you') + 3);
+
+            chat.appendText(': ' + message + "\n");
+            nickFormat.bold = false;
+            chat.setTextFormat(nickFormat, chat.text.lastIndexOf(': ' + message), chat.text.lastIndexOf(': ' + message) + (': ' + message).length);
+        }
+
+        private function sendTextMessage(event:Event):void
+        {
+            outcomingMessage = outcomingMessageTextArea.text;
+            dispatchEvent(new Event('OUTCOMING_MESSAGE'));
+            addMyChatMessage(outcomingMessage);
+            outcomingMessageTextArea.text = '';
+        }
+
+        public function get _outcomingMessage():String
+        {
+            return outcomingMessage;
         }
     }
 }
