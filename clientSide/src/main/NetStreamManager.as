@@ -73,7 +73,7 @@ package main
                     recvStreams[strangerPeers[key].id].recvStream = new NetStream(netConnection, strangerPeers[key].id);
                     recvStreams[strangerPeers[key].id].recvStream.play("media");
                     recvStreams[strangerPeers[key].id].recvStream.client = this;
-                    recvStreams[strangerPeers[key].id].recvStream.addEventListener(NetStatusEvent.NET_STATUS,netStatusHandler);
+                    recvStreams[strangerPeers[key].id].recvStream.addEventListener(NetStatusEvent.NET_STATUS, netStatusHandler);
 
                     recvStreams[strangerPeers[key].id].nick = strangerPeers[key].nick;
                     recvStreams[strangerPeers[key].id].isConnected = 0;
@@ -84,7 +84,8 @@ package main
             sendSomeData('ping');
         }
 
-        private function netStatusHandler(event:NetStatusEvent):void{
+        private function netStatusHandler(event:NetStatusEvent):void
+        {
             trace(event.info.code);
         }
 
@@ -96,7 +97,7 @@ package main
             {
                 if (recvStreams[key].isUpdate == 0)
                 {
-                    recvStreams.splice(recvStreams.indexOf(recvStreams[key]),1);
+                    recvStreams.splice(recvStreams.indexOf(recvStreams[key]), 1);
                 }
                 else
                 {
@@ -140,7 +141,7 @@ package main
 
         public function sendSomeData(type:String, message:String = ''):void
         {
-            var string:String = ''
+            var string:String = '';
             switch (type)
             {
                 case 'ping':

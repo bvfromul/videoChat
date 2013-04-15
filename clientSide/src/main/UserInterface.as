@@ -138,7 +138,7 @@ package main
             videoStatusLabel = new Label();
             videoStatusLabel.x = 217;
             videoStatusLabel.y = 41;
-            videoStatusLabel.text = 'waiting  connection';
+            videoStatusLabel.text = 'waiting connection';
             videoStatusLabel.id = 'videoStatusLabel';
             addElement(videoStatusLabel);
 
@@ -257,7 +257,7 @@ package main
             }
         }
 
-        private function sendTextMessage(event:Event=null):void
+        private function sendTextMessage(event:Event = null):void
         {
             outcomingMessage = outcomingMessageTextArea.text;
             dispatchEvent(new Event('OUTCOMING_MESSAGE'));
