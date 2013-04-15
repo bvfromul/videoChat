@@ -15,9 +15,8 @@ package main
         private var webServerUrl:String;
         private var peerID:String;
         private var userNick:String;
-        private var _peersList:Array;
+        private var peersList:Array;
         private var refreshConnectionTimer:Timer;
-        private var _errorString:String;
 
         public function UserHttpManager(webUrl:String, peer:String, nick:String)
         {
@@ -30,16 +29,6 @@ package main
             refreshConnectionTimer = new Timer(1000 * 30);
             refreshConnectionTimer.addEventListener(TimerEvent.TIMER, refreshConnection);
             refreshConnectionTimer.start();
-        }
-
-        public function get peersList():Array
-        {
-            return _peersList;
-        }
-
-        public function get errorString():String
-        {
-            return _errorString;
         }
 
         private function refreshConnection(event:TimerEvent):void
@@ -116,22 +105,20 @@ package main
                     }
                     else
                     {
-                        _errorString = 'Ошибка соединения';
-                        dispatchEvent(new Event('USERSHTTP_ERROR'));
-                    }
+                        dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
+                     }
                 }
                 else if (result.result.update is String)
                 {
                     if (result.result.update == 'busy nickname')
                     {
-                        _errorString = 'Данный ник уже используется';
-                        dispatchEvent(new Event('USERSHTTP_ERROR'));
+                        dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Данный ник уже используется'));
                     }
                 }
             }
             else if (result.hasOwnProperty("peers"))
             {
-                _peersList=[];
+                peersList=[];
 
                 for each (var strangerPeer:Object in result.peers)
                 {
@@ -142,25 +129,22 @@ package main
                         {
                             if (strangerPeer[key].id != peerID)
                             {
-                                _peersList.push(strangerPeer[key]);
+                                peersList.push(strangerPeer[key]);
                             }
                         }
                     }
                 }
-
-                dispatchEvent(new Event('SUCCESS_GET_PEERS'));
+                dispatchEvent(new UserHttpManagerEvents('successGetPeers', peersList));
             }
             else
             {
-                _errorString = 'Ошибка соединения';
-                dispatchEvent(new Event('USERSHTTP_ERROR'));
+                dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
             }
         }
 
         private function httpFault(event:FaultEvent):void
         {
-            _errorString = 'Ошибка соединения';
-            dispatchEvent(new Event('USERSHTTP_ERROR'));
+            dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
         }
     }
 }

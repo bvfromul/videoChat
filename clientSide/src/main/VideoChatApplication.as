@@ -49,13 +49,13 @@ package main
 
             userHttpManger = new UserHttpManager(applicationData.webServerUrl, applicationData.peerID, applicationData.userNick);
             userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
-            userHttpManger.addEventListener('SUCCESS_GET_PEERS', peersIsReady);
-            userHttpManger.addEventListener('USERSHTTP_ERROR', userHttpError);
+            userHttpManger.addEventListener(UserHttpManagerEvents.SUCCESS_GET_PEERS, peersIsReady);
+            userHttpManger.addEventListener(UserHttpManagerEvents.USERS_HTTP_ERROR, userHttpError);
         }
 
-        private function userHttpError(event:Event):void
+        private function userHttpError(event:UserHttpManagerEvents):void
         {
-            userInterface.showError(userHttpManger.errorString);
+            userInterface.showError(event.customEventData as String);
         }
 
         private function connectionIsReady(event:Event):void
@@ -63,7 +63,7 @@ package main
             applicationData.saveHost(userInterface.currentHostsList);
         }
 
-        private function peersIsReady(event:Event):void
+        private function peersIsReady(event:UserHttpManagerEvents):void
         {
             var isNewConnecion:Boolean;
             if (applicationData.peerList.length)
@@ -75,7 +75,7 @@ package main
                 isNewConnecion = true;
             }
 
-            applicationData.peerList = userHttpManger.peersList;
+            applicationData.peerList = event.customEventData as Array;
             if (isNewConnecion)
             {
                 showVideoAndChatUi(applicationData.peerList.length);
