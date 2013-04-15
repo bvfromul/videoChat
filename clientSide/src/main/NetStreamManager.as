@@ -8,8 +8,8 @@ package main
 
     public class NetStreamManager extends EventDispatcher
     {
-        private var textareaMessage:Object;
-        private var peerId:String;
+        private var _textareaMessage:Object;
+        private var _peerId:String;
         private var netConnection:NetConnection;
         private var sendStream:NetStream;
         private var recvStreams:Object = {};
@@ -30,14 +30,14 @@ package main
         {
             if (event.info.code == 'NetConnection.Connect.Success')
             {
-                peerId = netConnection.nearID;
+                _peerId = netConnection.nearID;
                 dispatchEvent(new Event('PEERID_READY'));
             }
         }
 
-        public function get _peerId():String
+        public function get peerId():String
         {
-            return peerId;
+            return _peerId;
         }
 
         public function initStreams(strangerPeers:Array, isNewConnecion:Boolean):void
@@ -108,31 +108,31 @@ package main
 
         public function receiveSomeData(message:String):void
         {
-            textareaMessage = {};
-            var peer:String = message.substr(6, peerId.length);
-            textareaMessage.text = '';
+            _textareaMessage = {};
+            var peer:String = message.substr(6, _peerId.length);
+            _textareaMessage.text = '';
 
             if (recvStreams[peer])
             {
-                textareaMessage.nick = recvStreams[peer].nick;
-                textareaMessage.nickColor = peer.substr(0, 6);
+                _textareaMessage.nick = recvStreams[peer].nick;
+                _textareaMessage.nickColor = peer.substr(0, 6);
 
                 switch (message.substr(peer.length + 7, 5))
                 {
                     case '/ping':
                         if (recvStreams[peer].isConnected == 0)
                         {
-                            textareaMessage.text = ' connected';
+                            _textareaMessage.text = ' connected';
                             recvStreams[peer].isConnected = 1;
                         }
                     break;
 
                     case '/text':
-                        textareaMessage.text = ': ' + message.substring(peer.length + 13, message.length);
+                        _textareaMessage.text = ': ' + message.substring(peer.length + 13, message.length);
                     break;
                 }
 
-                if (textareaMessage.text.length)
+                if (_textareaMessage.text.length)
                 {
                     dispatchEvent(new Event('INCOMING_MESSAGE'));
                 }
@@ -145,11 +145,11 @@ package main
             switch (type)
             {
                 case 'ping':
-                    string = '/from ' + peerId + ' /ping';
+                    string = '/from ' + _peerId + ' /ping';
                 break;
 
                 case 'text':
-                    string = '/from ' + peerId + ' /text ' + message;
+                    string = '/from ' + _peerId + ' /text ' + message;
                 break;
             }
 
@@ -159,9 +159,9 @@ package main
             }
         }
 
-        public function get _textareaMessage():Object
+        public function get textareaMessage():Object
         {
-            return textareaMessage;
+            return _textareaMessage;
         }
     }
 }

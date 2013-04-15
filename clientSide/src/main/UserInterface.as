@@ -22,9 +22,9 @@ package main
 
     public class UserInterface extends Group
     {
-        private var hostURL:String;
-        private var userNick:String;
-        private var hostsArray:Array;
+        private var _hostURL:String;
+        private var _userNick:String;
+        private var _hostsArray:Array;
 
         private var sendButton:Button;
         private var reconnectButton:Button;
@@ -34,7 +34,7 @@ package main
         private var chatStatusLabel:Label;
         private var chat:TextField;
         private var defaultChatTextFormat:TextFormat;
-        private var outcomingMessage:String;
+        private var _outcomingMessage:String;
         private var outcomingMessageTextArea:TextArea;
 
         public function UserInterface(hosts:Array)
@@ -44,7 +44,7 @@ package main
             this.percentWidth = 100;
             this.percentHeight = 100;
 
-            hostsArray = hosts;
+            _hostsArray = hosts;
             showConnectInterface();
         }
 
@@ -61,7 +61,7 @@ package main
             hostList.x = 257;
             hostList.y = 192;
             hostList.id = 'hostList';
-            hostList.dataProvider = new ArrayCollection(hostsArray);
+            hostList.dataProvider = new ArrayCollection(_hostsArray);
             hostList.addEventListener(Event.CLEAR, testClear);
             addElement(hostList);
 
@@ -91,8 +91,8 @@ package main
 
         private function testClear(event:Event):void
         {
-            hostsArray.splice(event.currentTarget.selectedIndex, 1);
-            event.currentTarget.dataProvider = new ArrayCollection(hostsArray);
+            _hostsArray.splice(event.currentTarget.selectedIndex, 1);
+            event.currentTarget.dataProvider = new ArrayCollection(_hostsArray);
         }
 
         private function insertDefaultNick(target:TextInput):void
@@ -102,28 +102,28 @@ package main
 
         private function initConnection(event:MouseEvent):void
         {
-            hostURL = (this.getChildAt(1) as ComboBox).textInput.text;
-            userNick = (this.getChildAt(3) as TextInput).text;
+            _hostURL = (this.getChildAt(1) as ComboBox).textInput.text;
+            _userNick = (this.getChildAt(3) as TextInput).text;
 
-            if (userNick.length > 0 && hostURL.length > 0)
+            if (_userNick.length > 0 && _hostURL.length > 0)
             {
                 dispatchEvent(new Event('NICK_AND_HOST_READY'));
             }
         }
 
-        public function get _userNick():String
+        public function get userNick():String
         {
-            return userNick;
+            return _userNick;
         }
 
-        public function get _hostURL():String
+        public function get hostURL():String
         {
-            return hostURL;
+            return _hostURL;
         }
 
-        public function get _currentHostsList():Array
+        public function get currentHostsList():Array
         {
-            return hostsArray;
+            return _hostsArray;
         }
 
         public function showError(errorString:String):void
@@ -250,7 +250,6 @@ package main
 
         private function outcomingMessageTextAreaKeyUp(event:KeyboardEvent):void
         {
-            trace(event.keyCode);
             if (event.keyCode == 13 && event.ctrlKey)
             {
                 sendTextMessage();
@@ -259,15 +258,15 @@ package main
 
         private function sendTextMessage(event:Event = null):void
         {
-            outcomingMessage = outcomingMessageTextArea.text;
+            _outcomingMessage = outcomingMessageTextArea.text;
             dispatchEvent(new Event('OUTCOMING_MESSAGE'));
-            addMyChatMessage(outcomingMessage);
+            addMyChatMessage(_outcomingMessage);
             outcomingMessageTextArea.text = '';
         }
 
-        public function get _outcomingMessage():String
+        public function get outcomingMessage():String
         {
-            return outcomingMessage;
+            return _outcomingMessage;
         }
     }
 }

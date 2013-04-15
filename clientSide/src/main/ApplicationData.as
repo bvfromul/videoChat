@@ -4,75 +4,75 @@ package main
 
     public class ApplicationData
     {
-        private var cirrusURL:String            = 'rtmfp://p2p.rtmfp.net/';
-        private var cirrusDeveloperKey:String   = 'ee460bd53e12fcdeb6e9d986-7b07fa96424d';
-        private var userNick:String;
-        private var webServerUrl:String;
-        private var peerID:String;
+        private var _cirrusURL:String            = 'rtmfp://p2p.rtmfp.net/';
+        private var _cirrusDeveloperKey:String   = 'ee460bd53e12fcdeb6e9d986-7b07fa96424d';
+        private var _userNick:String;
+        private var _webServerUrl:String;
+        private var _peerID:String;
         private var sharedObject:SharedObject;
-        private var hostList:Array;
-        private var peerList:Array;
+        private var _hostList:Array;
+        private var _peerList:Array;
 
         public function ApplicationData()
         {
-            hostList = [];
-            peerList = [];
+            _hostList = [];
+            _peerList = [];
             sharedObject = SharedObject.getLocal('videoChat');
 
             if (sharedObject.data.hostList != null)
             {
-                hostList = sharedObject.data.hostList;
+                _hostList = sharedObject.data.hostList;
             }
         }
 
-        public function set _userNick(nick:String):void
+        public function set userNick(nick:String):void
         {
-            userNick = nick;
+            _userNick = nick;
         }
 
-        public function get _userNick():String
+        public function get userNick():String
         {
-            return userNick;
+            return _userNick;
         }
 
-        public function set _webServerUrl(url:String):void
+        public function set webServerUrl(url:String):void
         {
-            webServerUrl = url;
+            _webServerUrl = url;
         }
 
-        public function get _webServerUrl():String
+        public function get webServerUrl():String
         {
-            return webServerUrl;
+            return _webServerUrl;
         }
 
-        public function set _peerID(peer:String):void
+        public function set peerID(peer:String):void
         {
-            peerID = peer;
+            _peerID = peer;
         }
 
-        public function get _peerID():String
+        public function get peerID():String
         {
-            return peerID;
+            return _peerID;
         }
 
-        public function set _peerList(peers:Array):void
+        public function set peerList(peers:Array):void
         {
-            peerList = peers;
+            _peerList = peers;
         }
 
-        public function get _peerList():Array
+        public function get peerList():Array
         {
-            return peerList;
+            return _peerList;
         }
 
-        public function get _cirrusURL():String
+        public function get cirrusURL():String
         {
-            return cirrusURL;
+            return _cirrusURL;
         }
 
-        public function get _cirrusDeveloperKey():String
+        public function get cirrusDeveloperKey():String
         {
-            return cirrusDeveloperKey;
+            return _cirrusDeveloperKey;
         }
 
         public function saveHost(hosts:Array):void
@@ -110,9 +110,9 @@ package main
             sharedObject.flush();
         }
 
-        public function get _hostList():Array
+        public function get hostList():Array
         {
-            return hostList;
+            return _hostList;
         }
     }
 }

@@ -15,9 +15,9 @@ package main
         private var webServerUrl:String;
         private var peerID:String;
         private var userNick:String;
-        private var peersList:Array;
+        private var _peersList:Array;
         private var refreshConnectionTimer:Timer;
-        private var errorString:String;
+        private var _errorString:String;
 
         public function UserHttpManager(webUrl:String, peer:String, nick:String)
         {
@@ -32,14 +32,14 @@ package main
             refreshConnectionTimer.start();
         }
 
-        public function get _peersList():Array
+        public function get peersList():Array
         {
-            return peersList;
+            return _peersList;
         }
 
-        public function get _errorString():String
+        public function get errorString():String
         {
-            return errorString;
+            return _errorString;
         }
 
         private function refreshConnection(event:TimerEvent):void
@@ -116,7 +116,7 @@ package main
                     }
                     else
                     {
-                        errorString = 'Ошибка соединения';
+                        _errorString = 'Ошибка соединения';
                         dispatchEvent(new Event('USERSHTTP_ERROR'));
                     }
                 }
@@ -124,14 +124,14 @@ package main
                 {
                     if (result.result.update == 'busy nickname')
                     {
-                        errorString = 'Данный ник уже используется';
+                        _errorString = 'Данный ник уже используется';
                         dispatchEvent(new Event('USERSHTTP_ERROR'));
                     }
                 }
             }
             else if (result.hasOwnProperty("peers"))
             {
-                peersList=[];
+                _peersList=[];
 
                 for each (var strangerPeer:Object in result.peers)
                 {
@@ -142,7 +142,7 @@ package main
                         {
                             if (strangerPeer[key].id != peerID)
                             {
-                                peersList.push(strangerPeer[key]);
+                                _peersList.push(strangerPeer[key]);
                             }
                         }
                     }
@@ -152,14 +152,14 @@ package main
             }
             else
             {
-                errorString = 'Ошибка соединения';
+                _errorString = 'Ошибка соединения';
                 dispatchEvent(new Event('USERSHTTP_ERROR'));
             }
         }
 
         private function httpFault(event:FaultEvent):void
         {
-            errorString = 'Ошибка соединения';
+            _errorString = 'Ошибка соединения';
             dispatchEvent(new Event('USERSHTTP_ERROR'));
         }
     }
