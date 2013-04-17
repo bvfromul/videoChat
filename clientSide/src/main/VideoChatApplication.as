@@ -22,8 +22,8 @@ package main
         {
             applicationData = new ApplicationData();
             netStreamManager = new NetStreamManager(applicationData.cirrusURL, applicationData.cirrusDeveloperKey);
-            netStreamManager.addEventListener('PEERID_READY', pickupPeerId);
-            netStreamManager.addEventListener('INCOMING_MESSAGE', sendTextareaMessagetoUI);
+            netStreamManager.addEventListener(ApplicationEvents.PEERID_READY, pickupPeerId);
+            netStreamManager.addEventListener(ApplicationEvents.INCOMING_MESSAGE, sendTextareaMessagetoUI);
 
             createConnectionUi();
         }
@@ -31,29 +31,29 @@ package main
         private function createConnectionUi():void
         {
             userInterface = new UserInterface(applicationData.hostList);
-            userInterface.addEventListener('NICK_AND_HOST_READY', allDataReady);
-            userInterface.addEventListener('OUTCOMING_MESSAGE', sendMessage);
+            userInterface.addEventListener(ApplicationEvents.NICK_AND_HOST_READY, allDataReady);
+            userInterface.addEventListener(ApplicationEvents.OUTCOMING_MESSAGE, sendMessage);
 
             addElement(userInterface);
         }
 
-        private function pickupPeerId(event:Event):void
+        private function pickupPeerId(event:ApplicationEvents):void
         {
-            applicationData.peerID = netStreamManager.peerId;
+            applicationData.peerID = event.customEventData as String;
         }
 
-        private function allDataReady(event:Event):void
+        private function allDataReady(event:ApplicationEvents):void
         {
-            applicationData.userNick = userInterface.userNick;
-            applicationData.webServerUrl = userInterface.hostURL;
+            applicationData.userNick = event.customEventData.nick;
+            applicationData.webServerUrl = event.customEventData.host;
 
             userHttpManger = new UserHttpManager(applicationData.webServerUrl, applicationData.peerID, applicationData.userNick);
             userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
-            userHttpManger.addEventListener(UserHttpManagerEvents.SUCCESS_GET_PEERS, peersIsReady);
-            userHttpManger.addEventListener(UserHttpManagerEvents.USERS_HTTP_ERROR, userHttpError);
+            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_GET_PEERS, peersIsReady);
+            userHttpManger.addEventListener(ApplicationEvents.USERS_HTTP_ERROR, userHttpError);
         }
 
-        private function userHttpError(event:UserHttpManagerEvents):void
+        private function userHttpError(event:ApplicationEvents):void
         {
             userInterface.showError(event.customEventData as String);
         }
@@ -63,7 +63,7 @@ package main
             applicationData.saveHost(userInterface.currentHostsList);
         }
 
-        private function peersIsReady(event:UserHttpManagerEvents):void
+        private function peersIsReady(event:ApplicationEvents):void
         {
             var isNewConnecion:Boolean;
             if (applicationData.peerList.length)
@@ -88,14 +88,14 @@ package main
             userInterface.showVideoAndChatUi(peersCount);
         }
 
-        private function sendTextareaMessagetoUI(event:Event):void
+        private function sendTextareaMessagetoUI(event:ApplicationEvents):void
         {
-            userInterface.addStrangerChatMessage(netStreamManager.textareaMessage);
+            userInterface.addStrangerChatMessage(event.customEventData);
         }
 
-        private function sendMessage(event:Event):void
+        private function sendMessage(event:ApplicationEvents):void
         {
-            netStreamManager.sendSomeData('text', userInterface.outcomingMessage);
+            netStreamManager.sendSomeData('text', event.customEventData as String);
         }
     }
 }

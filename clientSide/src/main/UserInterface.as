@@ -22,8 +22,6 @@ package main
 
     public class UserInterface extends Group
     {
-        private var _hostURL:String;
-        private var _userNick:String;
         private var _hostsArray:Array;
 
         private var sendButton:Button;
@@ -34,7 +32,6 @@ package main
         private var chatStatusLabel:Label;
         private var chat:TextField;
         private var defaultChatTextFormat:TextFormat;
-        private var _outcomingMessage:String;
         private var outcomingMessageTextArea:TextArea;
 
         public function UserInterface(hosts:Array)
@@ -102,23 +99,16 @@ package main
 
         private function initConnection(event:MouseEvent):void
         {
-            _hostURL = (this.getChildAt(1) as ComboBox).textInput.text;
-            _userNick = (this.getChildAt(3) as TextInput).text;
+            var hostURL:String = (this.getChildAt(1) as ComboBox).textInput.text;
+            var userNick:String = (this.getChildAt(3) as TextInput).text;
 
-            if (_userNick.length > 0 && _hostURL.length > 0)
+            if (userNick.length > 0 && hostURL.length > 0)
             {
-                dispatchEvent(new Event('NICK_AND_HOST_READY'));
+                var eventData:Object = {};
+                eventData.host = hostURL;
+                eventData.nick = userNick;
+                dispatchEvent(new ApplicationEvents('nickAndHostReady', eventData));
             }
-        }
-
-        public function get userNick():String
-        {
-            return _userNick;
-        }
-
-        public function get hostURL():String
-        {
-            return _hostURL;
         }
 
         public function get currentHostsList():Array
@@ -258,15 +248,10 @@ package main
 
         private function sendTextMessage(event:Event = null):void
         {
-            _outcomingMessage = outcomingMessageTextArea.text;
-            dispatchEvent(new Event('OUTCOMING_MESSAGE'));
-            addMyChatMessage(_outcomingMessage);
+            var outcomingMessage:String = outcomingMessageTextArea.text;
+            dispatchEvent(new ApplicationEvents('outcomingMessage', outcomingMessage));
+            addMyChatMessage(outcomingMessage);
             outcomingMessageTextArea.text = '';
-        }
-
-        public function get outcomingMessage():String
-        {
-            return _outcomingMessage;
         }
     }
 }

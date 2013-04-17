@@ -105,14 +105,14 @@ package main
                     }
                     else
                     {
-                        dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
+                        dispatchEvent(new ApplicationEvents('usersHttpError', 'Ошибка соединения'));
                      }
                 }
                 else if (result.result.update is String)
                 {
                     if (result.result.update == 'busy nickname')
                     {
-                        dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Данный ник уже используется'));
+                        dispatchEvent(new ApplicationEvents('usersHttpError', 'Данный ник уже используется'));
                     }
                 }
             }
@@ -134,17 +134,17 @@ package main
                         }
                     }
                 }
-                dispatchEvent(new UserHttpManagerEvents('successGetPeers', peersList));
+                dispatchEvent(new ApplicationEvents('successGetPeers', peersList));
             }
             else
             {
-                dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
+                dispatchEvent(new ApplicationEvents('usersHttpError', 'Ошибка соединения'));
             }
         }
 
         private function httpFault(event:FaultEvent):void
         {
-            dispatchEvent(new UserHttpManagerEvents('usersHttpError', 'Ошибка соединения'));
+            dispatchEvent(new ApplicationEvents('usersHttpError', 'Ошибка соединения'));
         }
     }
 }
