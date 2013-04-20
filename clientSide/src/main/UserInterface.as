@@ -9,7 +9,9 @@ package main
     
     import mx.collections.ArrayCollection;
     import mx.controls.Alert;
+    import mx.controls.VScrollBar;
     import mx.core.UIComponent;
+    import mx.events.ScrollEvent;
     
     import spark.components.Button;
     import spark.components.ComboBox;
@@ -17,7 +19,6 @@ package main
     import spark.components.Label;
     import spark.components.TextArea;
     import spark.components.TextInput;
-    import spark.components.VScrollBar;
     import spark.components.VideoDisplay;
 
     public class UserInterface extends Group
@@ -33,6 +34,7 @@ package main
         private var chat:TextField;
         private var defaultChatTextFormat:TextFormat;
         private var outcomingMessageTextArea:TextArea;
+        private var scrollBar:VScrollBar;
 
         public function UserInterface(hosts:Array)
         {
@@ -223,6 +225,8 @@ package main
                 chatStatusLabel.text = 'connected';
                 outcomingMessageTextArea.addEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
             }
+
+            addChatScroll();
         }
 
         private function addMyChatMessage(message:String):void
@@ -236,6 +240,8 @@ package main
             chat.appendText(': ' + message + "\n");
             nickFormat.bold = false;
             chat.setTextFormat(nickFormat, chat.text.lastIndexOf(': ' + message), chat.text.lastIndexOf(': ' + message) + (': ' + message).length);
+
+            addChatScroll();
         }
 
         private function outcomingMessageTextAreaKeyUp(event:KeyboardEvent):void
@@ -244,6 +250,33 @@ package main
             {
                 sendTextMessage();
             }
+        }
+
+        private function addChatScroll():void
+        {
+            if (chat.textHeight > chat.height)
+            {
+                if (!scrollBar)
+                {
+                    scrollBar = new VScrollBar();
+
+                    scrollBar.height = chat.height;
+                    scrollBar.move(chat.x + chat.width, chat.y);
+                    scrollBar.minScrollPosition = 0;
+                    scrollBar.lineScrollSize = 500;
+                    scrollBar.pageScrollSize = 100;
+                    scrollBar.addEventListener(ScrollEvent.SCROLL, scrollingChat);
+                    addElement(scrollBar);
+                }
+                scrollBar.maxScrollPosition = chat.textHeight - chat.height;
+                scrollBar.scrollPosition = chat.textHeight - chat.height;
+                chat.scrollV = chat.maxScrollV;
+            }
+        }
+
+        private function scrollingChat(event:ScrollEvent):void
+        {
+            chat.scrollV = event.currentTarget.scrollPosition;
         }
 
         private function sendTextMessage(event:Event = null):void
