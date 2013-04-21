@@ -10,10 +10,11 @@ package main
         public static const USERS_HTTP_ERROR:String = 'usersHttpError';
         public static const PEERID_READY:String = 'peeridReady';
         public static const INCOMING_MESSAGE:String = 'incomingMessage'
+        public static const NO_ACTIVE_STREAM:String = 'noActiveStream'
 
         public var customEventData:Object;
 
-        public function ApplicationEvents(type:String, EventData:Object):void
+        public function ApplicationEvents(type:String, EventData:Object = null):void
         {
             super(type);
             customEventData = EventData;

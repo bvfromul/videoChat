@@ -24,6 +24,7 @@ package main
             netStreamManager = new NetStreamManager(applicationData.cirrusURL, applicationData.cirrusDeveloperKey);
             netStreamManager.addEventListener(ApplicationEvents.PEERID_READY, pickupPeerId);
             netStreamManager.addEventListener(ApplicationEvents.INCOMING_MESSAGE, sendTextareaMessagetoUI);
+            netStreamManager.addEventListener(ApplicationEvents.NO_ACTIVE_STREAM, disableChat);
 
             createConnectionUi();
         }
@@ -35,6 +36,11 @@ package main
             userInterface.addEventListener(ApplicationEvents.OUTCOMING_MESSAGE, sendMessage);
 
             addElement(userInterface);
+        }
+
+        private function disableChat(event:ApplicationEvents):void
+        {
+            userInterface.disableChat();
         }
 
         private function pickupPeerId(event:ApplicationEvents):void

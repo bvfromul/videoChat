@@ -229,6 +229,14 @@ package main
             addChatScroll();
         }
 
+        public function disableChat():void
+        {
+            sendButton.enabled = false;
+            sendButton.removeEventListener(MouseEvent.CLICK, sendTextMessage);
+            chatStatusLabel.text = 'waiting connection';
+            outcomingMessageTextArea.removeEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
+        }
+
         private function addMyChatMessage(message:String):void
         {
             chat.appendText('you');

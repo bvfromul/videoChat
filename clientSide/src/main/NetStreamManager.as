@@ -86,17 +86,33 @@ package main
         private function deleteOldStreams():void
         {
             var key:String;
+            var activeStreamCounter:int = 0;
 
             for (key in recvStreams)
             {
                 if (recvStreams[key].isUpdate == 0)
                 {
-                    recvStreams.splice(recvStreams.indexOf(recvStreams[key]), 1);
+                    recvStreams[key].recvStream.close();
+                    if (recvStreams[key].isConnected == 1)
+                    {
+                        var textareaMessage:Object = {};
+                        textareaMessage.nick = recvStreams[key].nick;
+                        textareaMessage.nickColor = key.substr(0, 6);
+                        textareaMessage.text = ' disconnected';
+                        dispatchEvent(new ApplicationEvents('incomingMessage', textareaMessage));
+                    }
+                    delete recvStreams[key];
                 }
                 else
                 {
-                    recvStreams[key].isUpdate == 0;
+                    recvStreams[key].isUpdate = 0;
+                    activeStreamCounter++;
                 }
+            }
+
+            if (activeStreamCounter == 0)
+            {
+                dispatchEvent(new ApplicationEvents('noActiveStream'));
             }
         }
 
