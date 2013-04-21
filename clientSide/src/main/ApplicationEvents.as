@@ -9,8 +9,9 @@ package main
         public static const SUCCESS_GET_PEERS:String = 'successGetPeers';
         public static const USERS_HTTP_ERROR:String = 'usersHttpError';
         public static const PEERID_READY:String = 'peeridReady';
-        public static const INCOMING_MESSAGE:String = 'incomingMessage'
-        public static const NO_ACTIVE_STREAM:String = 'noActiveStream'
+        public static const INCOMING_MESSAGE:String = 'incomingMessage';
+        public static const NO_ACTIVE_STREAM:String = 'noActiveStream';
+        public static const SUCCESS_CONNECTED:String = 'successConnected';
 
         public var customEventData:Object;
 

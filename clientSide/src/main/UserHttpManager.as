@@ -100,7 +100,7 @@ package main
                 {
                     if (result.result.update == true)
                     {
-                        dispatchEvent(new Event('SUCCESS_CONNECT'));
+                        dispatchEvent(new ApplicationEvents('successConnected'));
                         getAllPeers();
                     }
                     else

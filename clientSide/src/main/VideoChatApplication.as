@@ -54,7 +54,7 @@ package main
             applicationData.webServerUrl = event.customEventData.host;
 
             userHttpManger = new UserHttpManager(applicationData.webServerUrl, applicationData.peerID, applicationData.userNick);
-            userHttpManger.addEventListener('SUCCESS_CONNECT', connectionIsReady);
+            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_CONNECTED, connectionIsReady);
             userHttpManger.addEventListener(ApplicationEvents.SUCCESS_GET_PEERS, peersIsReady);
             userHttpManger.addEventListener(ApplicationEvents.USERS_HTTP_ERROR, userHttpError);
         }
@@ -64,7 +64,7 @@ package main
             userInterface.showError(event.customEventData as String);
         }
 
-        private function connectionIsReady(event:Event):void
+        private function connectionIsReady(event:ApplicationEvents):void
         {
             applicationData.saveHost(userInterface.currentHostsList);
         }
