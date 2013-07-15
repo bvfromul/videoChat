@@ -30,7 +30,7 @@ package main
             if (event.info.code == 'NetConnection.Connect.Success')
             {
                 peerId = netConnection.nearID;
-                dispatchEvent(new ApplicationEvents('peeridReady', peerId));
+                dispatchEvent(new ApplicationEvents(ApplicationEvents.PEERID_READY, peerId));
             }
         }
 
@@ -99,7 +99,7 @@ package main
                         textareaMessage.nick = recvStreams[key].nick;
                         textareaMessage.nickColor = key.substr(0, 6);
                         textareaMessage.text = ' disconnected';
-                        dispatchEvent(new ApplicationEvents('incomingMessage', textareaMessage));
+                        dispatchEvent(new ApplicationEvents(ApplicationEvents.INCOMING_MESSAGE, textareaMessage));
                     }
                     delete recvStreams[key];
                 }
@@ -112,7 +112,7 @@ package main
 
             if (activeStreamCounter == 0)
             {
-                dispatchEvent(new ApplicationEvents('noActiveStream'));
+                dispatchEvent(new ApplicationEvents(ApplicationEvents.NO_ACTIVE_STREAM));
             }
         }
 
@@ -144,7 +144,7 @@ package main
 
                 if (textareaMessage.text.length)
                 {
-                    dispatchEvent(new ApplicationEvents('incomingMessage', textareaMessage));
+                    dispatchEvent(new ApplicationEvents(ApplicationEvents.INCOMING_MESSAGE, textareaMessage));
                 }
             }
         }

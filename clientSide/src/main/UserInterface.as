@@ -109,7 +109,7 @@ package main
                 var eventData:Object = {};
                 eventData.host = hostURL;
                 eventData.nick = userNick;
-                dispatchEvent(new ApplicationEvents('nickAndHostReady', eventData));
+                dispatchEvent(new ApplicationEvents(ApplicationEvents.NICK_AND_HOST_READY, eventData));
             }
         }
 
@@ -290,7 +290,7 @@ package main
         private function sendTextMessage(event:Event = null):void
         {
             var outcomingMessage:String = outcomingMessageTextArea.text;
-            dispatchEvent(new ApplicationEvents('outcomingMessage', outcomingMessage));
+            dispatchEvent(new ApplicationEvents(ApplicationEvents.OUTCOMING_MESSAGE, outcomingMessage));
             addMyChatMessage(outcomingMessage);
             outcomingMessageTextArea.text = '';
         }
