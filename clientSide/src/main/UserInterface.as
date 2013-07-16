@@ -273,13 +273,20 @@ package main
                     scrollBar.minScrollPosition = 0;
                     scrollBar.lineScrollSize = 500;
                     scrollBar.pageScrollSize = 100;
-                    scrollBar.addEventListener(ScrollEvent.SCROLL, scrollingChat);
                     addElement(scrollBar);
+
+                    scrollBar.addEventListener(ScrollEvent.SCROLL, scrollingChat);
+                    chat.addEventListener("mouseWheel", mouseWheelScrollChat);
                 }
                 scrollBar.maxScrollPosition = chat.textHeight - chat.height;
                 scrollBar.scrollPosition = chat.textHeight - chat.height;
                 chat.scrollV = chat.maxScrollV;
             }
+        }
+
+        private function mouseWheelScrollChat(event:MouseEvent):void
+        {
+            scrollBar.scrollPosition = Math.round(((chat.scrollV - 1 - event.delta) / chat.maxScrollV) * scrollBar.maxScrollPosition);
         }
 
         private function scrollingChat(event:ScrollEvent):void
