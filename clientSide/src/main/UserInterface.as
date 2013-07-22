@@ -221,8 +221,13 @@ package main
             if (!sendButton.enabled)
             {
                 sendButton.enabled = true;
-                sendButton.addEventListener(MouseEvent.CLICK, sendTextMessage);
+                playButton.enabled = true;
+                reconnectButton.enabled = true;
+
                 chatStatusLabel.text = 'connected';
+                videoStatusLabel.text = 'connected';
+
+                sendButton.addEventListener(MouseEvent.CLICK, sendTextMessage);
                 outcomingMessageTextArea.addEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
             }
 
@@ -232,8 +237,14 @@ package main
         public function disableChat():void
         {
             sendButton.enabled = false;
-            sendButton.removeEventListener(MouseEvent.CLICK, sendTextMessage);
+            sendButton.enabled = false;
+            playButton.enabled = false;
+            reconnectButton.enabled = false;
+
             chatStatusLabel.text = 'waiting connection';
+            videoStatusLabel.text = 'waiting connection';
+
+            sendButton.removeEventListener(MouseEvent.CLICK, sendTextMessage);
             outcomingMessageTextArea.removeEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
         }
 
