@@ -90,15 +90,16 @@ package main
 
             for (key in recvStreams)
             {
-                if (recvStreams[key].isUpdate == 0)
+                if (!recvStreams[key].isUpdate)
                 {
                     recvStreams[key].recvStream.close();
-                    if (recvStreams[key].isConnected == 1)
+                    if (recvStreams[key].isConnected)
                     {
-                        var textareaMessage:Object = {};
-                        textareaMessage.nick = recvStreams[key].nick;
-                        textareaMessage.nickColor = key.substr(0, 6);
-                        textareaMessage.text = ' disconnected';
+                        var textareaMessage:Object = {
+                            nick:       recvStreams[key].nick,
+                            nickColor:  key.substr(0, 6),
+                            text:       ' disconnected'
+                        };
                         dispatchEvent(new ApplicationEvents(ApplicationEvents.INCOMING_MESSAGE, textareaMessage));
                     }
                     delete recvStreams[key];
@@ -110,7 +111,7 @@ package main
                 }
             }
 
-            if (activeStreamCounter == 0)
+            if (!activeStreamCounter)
             {
                 dispatchEvent(new ApplicationEvents(ApplicationEvents.NO_ACTIVE_STREAM));
             }
@@ -130,7 +131,7 @@ package main
                 switch (message.substr(peer.length + 7, 5))
                 {
                     case '/ping':
-                        if (recvStreams[peer].isConnected == 0)
+                        if (!recvStreams[peer].isConnected)
                         {
                             textareaMessage.text = ' connected';
                             recvStreams[peer].isConnected = 1;

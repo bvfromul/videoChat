@@ -3,6 +3,7 @@ package main
     import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.events.TimerEvent;
+    import flash.net.URLRequestMethod;
     import flash.utils.Timer;
     
     import mx.rpc.events.FaultEvent;
@@ -21,12 +22,12 @@ package main
         public function UserHttpManager(webUrl:String, peer:String, nick:String)
         {
             webServerUrl = webUrl;
-            peerID = peer;
-            userNick = nick;
+            peerID       = peer;
+            userNick     = nick;
 
             doRegister();
 
-            refreshConnectionTimer = new Timer(1000 * 30);
+            refreshConnectionTimer = new Timer(1000 * 10);
             refreshConnectionTimer.addEventListener(TimerEvent.TIMER, refreshConnection);
             refreshConnectionTimer.start();
         }
@@ -35,10 +36,11 @@ package main
         {
             if (mHttpService)
             {
-                var request:Object = {};
-                request.username = userNick;
-                request.identity = peerID;
-                request.anticache = Math.random();
+                var request:Object = {
+                    username:   userNick,
+                    identity:   peerID,
+                    anticache:  Math.random()
+                };
                 mHttpService.cancel();
                 mHttpService.send(request);
             }
@@ -48,14 +50,15 @@ package main
         {
             mHttpService = new HTTPService();
             mHttpService.url = webServerUrl;
-            mHttpService.method = 'GET';
+            mHttpService.method = URLRequestMethod.GET;
             mHttpService.addEventListener("result", httpResult);
-            mHttpService.addEventListener("fault", httpFault);
-            
-            var request:Object = {};
-            request.username = userNick;
-            request.identity = peerID;
-            request.anticache = Math.random();
+            mHttpService.addEventListener("fault",  httpFault);
+
+            var request:Object = {
+                username:   userNick,
+                identity:   peerID,
+                anticache:  Math.random()
+            };
             mHttpService.cancel();
             mHttpService.send(request);
         }
@@ -64,9 +67,10 @@ package main
         {
             if (mHttpService)
             {
-                var request:Object = {};
-                request.username = userNick;
-                request.identity = "0";
+                var request:Object = {
+                    username: userNick,
+                    identity: "0"
+                };
                 mHttpService.cancel();
                 mHttpService.send(request);
             }
@@ -82,9 +86,10 @@ package main
         {
             if (mHttpService)
             {
-                var request:Object = {};
-                request.get_peers = 1;
-                request.anticache = Math.random();
+                var request:Object = {
+                    get_peers: 1,
+                    anticache: Math.random()
+                };
                 mHttpService.cancel();
                 mHttpService.send(request);
             }
@@ -98,7 +103,7 @@ package main
             {
                 if (result.result.update is Boolean)
                 {
-                    if (result.result.update == true)
+                    if (result.result.update)
                     {
                         dispatchEvent(new ApplicationEvents(ApplicationEvents.SUCCESS_CONNECTED));
                         getAllPeers();
@@ -106,7 +111,7 @@ package main
                     else
                     {
                         dispatchEvent(new ApplicationEvents(ApplicationEvents.USERS_HTTP_ERROR, 'Ошибка соединения'));
-                     }
+                    }
                 }
                 else if (result.result.update is String)
                 {

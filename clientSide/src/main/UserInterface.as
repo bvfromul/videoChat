@@ -6,13 +6,11 @@ package main
     import flash.events.MouseEvent;
     import flash.text.TextField;
     import flash.text.TextFormat;
-    
     import mx.collections.ArrayCollection;
     import mx.controls.Alert;
     import mx.controls.VScrollBar;
     import mx.core.UIComponent;
     import mx.events.ScrollEvent;
-    
     import spark.components.Button;
     import spark.components.ComboBox;
     import spark.components.Group;
@@ -50,40 +48,40 @@ package main
         private function showConnectInterface():void
         {
             var hostLabel:Label = new Label();
-            hostLabel.x = 214;
-            hostLabel.y = 203;
-            hostLabel.text = 'host';
-            hostLabel.id = 'hostLabel';
+            hostLabel.x         = 214;
+            hostLabel.y         = 203;
+            hostLabel.text      = 'host';
+            hostLabel.id        = 'hostLabel';
             addElement(hostLabel);
 
             var hostList:ComboBox = new ComboBox();
-            hostList.x = 257;
-            hostList.y = 192;
-            hostList.id = 'hostList';
+            hostList.x            = 257;
+            hostList.y            = 192;
+            hostList.id           = 'hostList';
             hostList.dataProvider = new ArrayCollection(_hostsArray);
             hostList.addEventListener(Event.CLEAR, testClear);
             addElement(hostList);
 
             var nickLabel:Label = new Label();
-            nickLabel.x = 214;
-            nickLabel.y = 245;
-            nickLabel.text = 'nick';
-            nickLabel.id = 'nickLabel';
+            nickLabel.x         = 214;
+            nickLabel.y         = 245;
+            nickLabel.text      = 'nick';
+            nickLabel.id        = 'nickLabel';
             addElement(nickLabel);
 
             var userNickTextInput:TextInput = new TextInput();
-            userNickTextInput.x = 257;
-            userNickTextInput.y = 235;
-            userNickTextInput.width = 146;
-            userNickTextInput.id = 'userNick';
+            userNickTextInput.x             = 257;
+            userNickTextInput.y             = 235;
+            userNickTextInput.width         = 146;
+            userNickTextInput.id            = 'userNick';
             insertDefaultNick(userNickTextInput);
             addElement(userNickTextInput);
 
             var connectButton:Button = new Button();
-            connectButton.x = 292;
-            connectButton.y = 276;
-            connectButton.label = 'connect';
-            connectButton.id = 'connectButton';
+            connectButton.x          = 292;
+            connectButton.y          = 276;
+            connectButton.label      = 'connect';
+            connectButton.id         = 'connectButton';
             connectButton.addEventListener(MouseEvent.CLICK, initConnection);
             addElement(connectButton);
         }
@@ -96,7 +94,7 @@ package main
 
         private function insertDefaultNick(target:TextInput):void
         {
-            target.text = 'nick_' + (Math.round(Math.random() * 98) + 1).toString();
+            target.text = 'nick_' + String(Math.round(Math.random() * 98) + 1);
         }
 
         private function initConnection(event:MouseEvent):void
@@ -104,11 +102,12 @@ package main
             var hostURL:String = (this.getChildAt(1) as ComboBox).textInput.text;
             var userNick:String = (this.getChildAt(3) as TextInput).text;
 
-            if (userNick.length > 0 && hostURL.length > 0)
+            if (userNick.length && hostURL.length)
             {
-                var eventData:Object = {};
-                eventData.host = hostURL;
-                eventData.nick = userNick;
+                var eventData:Object = {
+                    host: hostURL,
+                    nick: userNick
+                };
                 dispatchEvent(new ApplicationEvents(ApplicationEvents.NICK_AND_HOST_READY, eventData));
             }
         }
@@ -127,84 +126,84 @@ package main
         {
             removeAllElements();
 
-            videoStatusLabel = new Label();
-            videoStatusLabel.x = 217;
-            videoStatusLabel.y = 41;
-            videoStatusLabel.text = 'waiting connection';
-            videoStatusLabel.id = 'videoStatusLabel';
+            videoStatusLabel        = new Label();
+            videoStatusLabel.x      = 217;
+            videoStatusLabel.y      = 41;
+            videoStatusLabel.text   = 'waiting connection';
+            videoStatusLabel.id     = 'videoStatusLabel';
             addElement(videoStatusLabel);
 
-            chatStatusLabel = new Label();
-            chatStatusLabel.x = 695;
-            chatStatusLabel.y = 41;
-            chatStatusLabel.text = 'waiting connection';
-            chatStatusLabel.id = 'chatStatusLabel';
+            chatStatusLabel         = new Label();
+            chatStatusLabel.x       = 695;
+            chatStatusLabel.y       = 41;
+            chatStatusLabel.text    = 'waiting connection';
+            chatStatusLabel.id      = 'chatStatusLabel';
             addElement(chatStatusLabel);
 
-            var videoDisplay:VideoDisplay = new VideoDisplay();
-            videoDisplay.width = 374;
-            videoDisplay.height = 229;
-            videoDisplay.x = 65;
-            videoDisplay.y = 62;
-            videoDisplay.id = 'videoDisplay';
+            var videoDisplay:VideoDisplay   = new VideoDisplay();
+            videoDisplay.width              = 374;
+            videoDisplay.height             = 229;
+            videoDisplay.x                  = 65;
+            videoDisplay.y                  = 62;
+            videoDisplay.id                 = 'videoDisplay';
             addElement(videoDisplay);
 
-            reconnectButton = new Button();
-            reconnectButton.x = 62;
-            reconnectButton.y = 331;
-            reconnectButton.label = 'reconnect';
-            reconnectButton.id = 'reconnectButton';
+            reconnectButton         = new Button();
+            reconnectButton.x       = 62;
+            reconnectButton.y       = 331;
+            reconnectButton.label   = 'reconnect';
+            reconnectButton.id      = 'reconnectButton';
             reconnectButton.enabled = false;
             addElement(reconnectButton);
 
-            playButton = new Button();
-            playButton.x = 217;
-            playButton.y = 331;
-            playButton.label = 'play';
-            playButton.id = 'playButton';
-            playButton.enabled = false;
+            playButton          = new Button();
+            playButton.x        = 217;
+            playButton.y        = 331;
+            playButton.label    = 'play';
+            playButton.id       = 'playButton';
+            playButton.enabled  = false;
             addElement(playButton);
 
-            pauseButton = new Button();
-            pauseButton.x = 366;
-            pauseButton.y = 331;
-            pauseButton.label = 'pause';
-            pauseButton.id = 'pauseButton';
+            pauseButton         = new Button();
+            pauseButton.x       = 366;
+            pauseButton.y       = 331;
+            pauseButton.label   = 'pause';
+            pauseButton.id      = 'pauseButton';
             pauseButton.enabled = false;
             addElement(pauseButton);
 
-            var playList:ComboBox = new ComboBox();
-            playList.x = 62;
-            playList.y = 394;
-            playList.width = 374;
-            playList.id = 'palyList';
+            var playList:ComboBox   = new ComboBox();
+            playList.x              = 62;
+            playList.y              = 394;
+            playList.width          = 374;
+            playList.id             = 'palyList';
             addElement(playList);
 
-            var container:UIComponent = new UIComponent();
+            var container:UIComponent   = new UIComponent();
+            chat                        = new TextField();
+            chat.x                      = 531;
+            chat.y                      = 61;
+            chat.width                  = 361;
+            chat.height                 = 356;
+            chat.border                 = true;
             addElement(container);
-            chat = new TextField();
-            chat.x = 531;
-            chat.y = 61;
-            chat.width = 361;
-            chat.height = 356;
-            chat.border = true;
             container.addChild(chat);
             defaultChatTextFormat = chat.getTextFormat();
 
-            outcomingMessageTextArea = new TextArea();
-            outcomingMessageTextArea.x = 531;
-            outcomingMessageTextArea.y = 442;
-            outcomingMessageTextArea.width = 361;
+            outcomingMessageTextArea        = new TextArea();
+            outcomingMessageTextArea.x      = 531;
+            outcomingMessageTextArea.y      = 442;
+            outcomingMessageTextArea.width  = 361;
             outcomingMessageTextArea.height = 108;
-            outcomingMessageTextArea.id = 'message';
+            outcomingMessageTextArea.id     = 'message';
             addElement(outcomingMessageTextArea);
 
-            sendButton = new Button();
-            sendButton.x = 820;
-            sendButton.y = 572;
-            sendButton.label = 'send';
-            sendButton.id = 'sendButton';
-            sendButton.enabled = false;
+            sendButton          = new Button();
+            sendButton.x        = 820;
+            sendButton.y        = 572;
+            sendButton.label    = 'send';
+            sendButton.id       = 'sendButton';
+            sendButton.enabled  = false;
             addElement(sendButton);
         }
 
@@ -220,12 +219,12 @@ package main
 
             if (!sendButton.enabled)
             {
-                sendButton.enabled = true;
-                playButton.enabled = true;
+                sendButton.enabled      = true;
+                playButton.enabled      = true;
                 reconnectButton.enabled = true;
 
-                chatStatusLabel.text = 'connected';
-                videoStatusLabel.text = 'connected';
+                chatStatusLabel.text    = 'connected';
+                videoStatusLabel.text   = 'connected';
 
                 sendButton.addEventListener(MouseEvent.CLICK, sendTextMessage);
                 outcomingMessageTextArea.addEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
@@ -236,13 +235,13 @@ package main
 
         public function disableChat():void
         {
-            sendButton.enabled = false;
-            sendButton.enabled = false;
-            playButton.enabled = false;
+            sendButton.enabled      = false;
+            sendButton.enabled      = false;
+            playButton.enabled      = false;
             reconnectButton.enabled = false;
 
-            chatStatusLabel.text = 'waiting connection';
-            videoStatusLabel.text = 'waiting connection';
+            chatStatusLabel.text    = 'waiting connection';
+            videoStatusLabel.text   = 'waiting connection';
 
             sendButton.removeEventListener(MouseEvent.CLICK, sendTextMessage);
             outcomingMessageTextArea.removeEventListener(KeyboardEvent.KEY_UP, outcomingMessageTextAreaKeyUp);
@@ -277,20 +276,21 @@ package main
             {
                 if (!scrollBar)
                 {
-                    scrollBar = new VScrollBar();
-
-                    scrollBar.height = chat.height;
-                    scrollBar.move(chat.x + chat.width, chat.y);
+                    scrollBar                   = new VScrollBar();
+                    scrollBar.height            = chat.height;
                     scrollBar.minScrollPosition = 0;
-                    scrollBar.lineScrollSize = 500;
-                    scrollBar.pageScrollSize = 100;
+                    scrollBar.lineScrollSize    = 500;
+                    scrollBar.pageScrollSize    = 100;
+                    scrollBar.move(chat.x + chat.width, chat.y);
                     addElement(scrollBar);
 
-                    scrollBar.addEventListener(ScrollEvent.SCROLL, scrollingChat);
-                    chat.addEventListener("mouseWheel", mouseWheelScrollChat);
+                    scrollBar.addEventListener(ScrollEvent.SCROLL,  scrollingChat);
+                    chat.addEventListener("mouseWheel",             mouseWheelScrollChat);
                 }
+
                 scrollBar.maxScrollPosition = chat.textHeight - chat.height;
-                scrollBar.scrollPosition = chat.textHeight - chat.height;
+                scrollBar.scrollPosition    = chat.textHeight - chat.height;
+
                 chat.scrollV = chat.maxScrollV;
             }
         }
@@ -308,9 +308,10 @@ package main
         private function sendTextMessage(event:Event = null):void
         {
             var outcomingMessage:String = outcomingMessageTextArea.text;
+            outcomingMessageTextArea.text = '';
+
             dispatchEvent(new ApplicationEvents(ApplicationEvents.OUTCOMING_MESSAGE, outcomingMessage));
             addMyChatMessage(outcomingMessage);
-            outcomingMessageTextArea.text = '';
         }
     }
 }

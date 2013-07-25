@@ -1,9 +1,7 @@
 package main
 {
     import flash.events.Event;
-    
     import mx.events.FlexEvent;
-    
     import spark.components.Application;
 
     public class VideoChatApplication extends Application
@@ -20,11 +18,12 @@ package main
 
         private function init(event:FlexEvent):void
         {
-            applicationData = new ApplicationData();
+            applicationData  = new ApplicationData();
             netStreamManager = new NetStreamManager(applicationData.cirrusURL, applicationData.cirrusDeveloperKey);
-            netStreamManager.addEventListener(ApplicationEvents.PEERID_READY, pickupPeerId);
-            netStreamManager.addEventListener(ApplicationEvents.INCOMING_MESSAGE, sendTextareaMessagetoUI);
-            netStreamManager.addEventListener(ApplicationEvents.NO_ACTIVE_STREAM, disableChat);
+
+            netStreamManager.addEventListener(ApplicationEvents.PEERID_READY,       pickupPeerId);
+            netStreamManager.addEventListener(ApplicationEvents.INCOMING_MESSAGE,   sendTextareaMessagetoUI);
+            netStreamManager.addEventListener(ApplicationEvents.NO_ACTIVE_STREAM,   disableChat);
 
             createConnectionUi();
         }
@@ -32,8 +31,9 @@ package main
         private function createConnectionUi():void
         {
             userInterface = new UserInterface(applicationData.hostList);
-            userInterface.addEventListener(ApplicationEvents.NICK_AND_HOST_READY, allDataReady);
-            userInterface.addEventListener(ApplicationEvents.OUTCOMING_MESSAGE, sendMessage);
+
+            userInterface.addEventListener(ApplicationEvents.NICK_AND_HOST_READY,   allDataReady);
+            userInterface.addEventListener(ApplicationEvents.OUTCOMING_MESSAGE,     sendMessage);
 
             addElement(userInterface);
         }
@@ -50,13 +50,14 @@ package main
 
         private function allDataReady(event:ApplicationEvents):void
         {
-            applicationData.userNick = event.customEventData.nick;
+            applicationData.userNick     = event.customEventData.nick;
             applicationData.webServerUrl = event.customEventData.host;
 
             userHttpManger = new UserHttpManager(applicationData.webServerUrl, applicationData.peerID, applicationData.userNick);
-            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_CONNECTED, connectionIsReady);
-            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_GET_PEERS, peersIsReady);
-            userHttpManger.addEventListener(ApplicationEvents.USERS_HTTP_ERROR, userHttpError);
+
+            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_CONNECTED,    connectionIsReady);
+            userHttpManger.addEventListener(ApplicationEvents.SUCCESS_GET_PEERS,    peersIsReady);
+            userHttpManger.addEventListener(ApplicationEvents.USERS_HTTP_ERROR,     userHttpError);
         }
 
         private function userHttpError(event:ApplicationEvents):void
@@ -71,17 +72,9 @@ package main
 
         private function peersIsReady(event:ApplicationEvents):void
         {
-            var isNewConnecion:Boolean;
-            if (applicationData.peerList.length)
-            {
-                isNewConnecion = false;
-            }
-            else
-            {
-                isNewConnecion = true;
-            }
-
+            var isNewConnecion:Boolean = !Boolean(applicationData.peerList.length);
             applicationData.peerList = event.customEventData as Array;
+
             if (isNewConnecion)
             {
                 showVideoAndChatUi(applicationData.peerList.length);

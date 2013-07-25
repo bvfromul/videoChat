@@ -9,14 +9,15 @@ package main
         private var _userNick:String;
         private var _webServerUrl:String;
         private var _peerID:String;
-        private var sharedObject:SharedObject;
         private var _hostList:Array;
         private var _peerList:Array;
+        private var sharedObject:SharedObject;
 
         public function ApplicationData()
         {
             _hostList = [];
             _peerList = [];
+
             sharedObject = SharedObject.getLocal('videoChat');
 
             if (sharedObject.data.hostList != null)
@@ -77,14 +78,7 @@ package main
 
         public function saveHost(hosts:Array):void
         {
-            if (hosts.length)
-            {
-                if (checkUrl(hosts))
-                {
-                    writeHostInSO(hosts, webServerUrl);
-                }
-            }
-            else
+            if ((hosts.length && checkUrl(hosts)) || !hosts.length)
             {
                 writeHostInSO(hosts, webServerUrl);
             }
